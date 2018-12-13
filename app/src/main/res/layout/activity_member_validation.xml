@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearlayoutInsideScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey"
+    android:clickable="false"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/margin_50"
+        android:layout_marginLeft="@dimen/thirty_dp"
+        android:layout_marginRight="@dimen/thirty_dp"
+        android:layout_marginTop="@dimen/margin_50"
+        android:background="@drawable/new_login_signup_background"
+        android:gravity="center"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/text_signin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_40"
+            android:gravity="center"
+            android:text="MEMBERSHIP VALIDATION"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text16size" />
+
+        <TextView
+            android:id="@+id/txt_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/margin_15"
+            android:gravity="center"
+
+            android:textColor="@color/red"
+            android:visibility="visible" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_48"
+            android:layout_marginLeft="@dimen/twenty_five_dp"
+            android:layout_marginRight="@dimen/twenty_five_dp"
+            android:layout_marginTop="@dimen/margin_15">
+
+
+            <ImageView
+                android:id="@+id/img_member"
+                android:layout_width="@dimen/margin_20"
+                android:layout_height="@dimen/margin_20"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/margin_20"
+                android:src="@drawable/user_generic"
+                />
+
+
+            <EditText
+                android:id="@+id/edt_member_id"
+                style="@style/edittext_forgot"
+                android:hint="Member ID"
+                android:imeOptions="actionNext"
+                android:inputType="textNoSuggestions|text" />
+
+            <View
+
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/one_dp"
+                android:layout_below="@id/edt_member_id"
+                android:layout_marginTop="@dimen/five_dp"
+                android:background="@color/line"
+                android:visibility="visible"
+                />
+        </RelativeLayout>
+
+
+
+        <Button
+            android:id="@+id/btn_validate"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/margin_48"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/thirty_dp"
+            android:layout_marginRight="@dimen/thirty_dp"
+            android:layout_marginTop="@dimen/twenty_dp"
+            android:layout_marginBottom="@dimen/margin_100"
+            android:background="@drawable/gradient_background"
+            android:inputType="textCapCharacters"
+            android:text="VALIDATE"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text16size" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
+
