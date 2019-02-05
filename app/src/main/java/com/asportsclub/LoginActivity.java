@@ -98,12 +98,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onResponse(Call<GlobalVenderDetails> call, Response<GlobalVenderDetails> restResponse, GlobalVenderDetails response) {
                 if(response.getGlobalVenderDetails()!=null&& response.getGlobalVenderDetails().size()>0){
-                    mListVendorDetails.addAll(response.getGlobalVenderDetails());
-                    ArrayAdapter<GlobalVenderDetail> adapter =
-                            new ArrayAdapter<GlobalVenderDetail>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, mListVendorDetails);
-                    adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
-
-                    spinner.setAdapter(adapter);
+                    for(int i=0;i<response.getGlobalVenderDetails().size();i++){
+                        mListVendorDetails.add(new GlobalVenderDetail(response.getGlobalVenderDetails().get(i).getVenderId(),response.getGlobalVenderDetails().get(i).getVenderName()));
+                    }
+                    spinner.setItems(mListVendorDetails);
                 }
             }
         });
