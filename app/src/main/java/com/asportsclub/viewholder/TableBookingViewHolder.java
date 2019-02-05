@@ -1,14 +1,11 @@
 package com.asportsclub.viewholder;
 
 import android.content.Context;
-import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
-import com.asportsclub.ListLoader;
 import com.asportsclub.R;
 import com.asportsclub.TableBookingModel;
 import com.asportsclub.utils.AdapterCallbacks;
@@ -26,14 +23,17 @@ public class TableBookingViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public void bind(final TableBookingModel model, final AdapterCallbacks adapterCallbacks, final int position) {
-        if(model.isTableStatus()){
-            textViewTable.setBackgroundColor(context.getColor(R.color.app_green));
-        }else{
-            textViewTable.setBackgroundColor(context.getColor(R.color.table_booked));
-
+        if(model.isTableStatus()==0){
+            textViewTable.setBackgroundColor(context.getResources().getColor(R.color.app_green));
         }
+        else if(model.isTableStatus()==1){
+            textViewTable.setBackgroundColor(context.getResources().getColor(R.color.hint_color));
+        }
+        else if(model.isTableStatus()==2){
+            textViewTable.setBackgroundColor(context.getResources().getColor(R.color.table_booked));
+        }
+        textViewTable.setText(model.getTableName());
 
         textViewTable.setOnClickListener(new View.OnClickListener() {
             @Override

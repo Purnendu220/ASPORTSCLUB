@@ -1,6 +1,9 @@
 package com.asportsclub;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +12,7 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,7 +20,9 @@ import android.widget.TextView;
 
 import com.asportsclub.utils.AppMessages;
 import com.asportsclub.utils.StringUtils;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,7 +30,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText edt_email,edt_password;
     Button btn_sign_in;
     TextView txt_error;
-    ImageView img_email,img_password;
+    MaterialSpinner spinner;
+    ArrayList<VenderDetailsModel> mListVendorDetails = new ArrayList<>();
+    String mSelectedVendor;
 
 
     @Override
@@ -32,97 +40,48 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
         edt_email = (EditText)findViewById(R.id.edt_email);
         edt_password = (EditText)findViewById(R.id.edt_password);
         txt_error = (TextView) findViewById(R.id.txt_error);
         btn_sign_in = (Button) findViewById(R.id.btn_sign_in);
-        img_email = (ImageView)findViewById(R.id.img_email);
-        img_password = (ImageView)findViewById(R.id.img_password);
+        spinner = (MaterialSpinner) findViewById(R.id.spinner);
+//        mListVendorDetails.add(new VenderDetailsModel(0,"SELECT VENDORP"));
+//        mListVendorDetails.add(new VenderDetailsModel(8,"COFFEE SHOP"));
+//        mListVendorDetails.add(new VenderDetailsModel(8,"GARDEN VIEW BAR"));
+//        mListVendorDetails.add(new VenderDetailsModel(8,"LOUNGE BAR"));
+//        mListVendorDetails.add(new VenderDetailsModel(8,"RESTAURANT"));
+        // spinner.setItems(mListVendorDetails);
+
+
+        spinner.setItems("SELECT VENDOR", "COFFEE SHOP", "GARDEN VIEW BAR", "LOUNGE BAR", "RESTAURANT");
+
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                if(position>0){
+                    mSelectedVendor = item;
+                }
+                else{
+                    mSelectedVendor = null;
+                }
+                Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
+            }
+        });
         btn_sign_in.setOnClickListener(this);
-        setTextChangeListener(edt_email);
-        setTextChangeListener(edt_password);
-        setFocusChangeListener(edt_email);
-        setFocusChangeListener(edt_password);
+        call_ime_action();
 
 
     }
-    private void setTextChangeListener(final EditText editText) {
 
-        switch (editText.getId()) {
-            case R.id.edt_email:
-                addTextChangeListener(img_email, edt_email, R.drawable.new_post, R.drawable.new_post_filled, 0);
-                break;
-            case R.id.edt_password:
-                call_ime_action();
-                addTextChangeListener(img_password, edt_password, R.drawable.lock, R.drawable.lock_filled, 6);
-                break;
-        }
-    }
-
-    private void addTextChangeListener(final ImageView mImageView, final EditText mEditText, final int drawable1, final int drawable3, final int mLength) {
-
-        mEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int length = mEditText.getText().length();
-                int color = 0;
-//                if (length == 0) {
-//                    color = ContextCompat.getColor(getActivity(), R.color.icon_color);
-//                } else
-                if ((length < mLength) || (mLength == 0 && (!StringUtils.isEmailValid(mEditText.getText().toString())))) {
-                    color = ContextCompat.getColor(LoginActivity.this, R.color.red);
-                } else {
-                    mImageView.setImageResource(drawable3);
-                    mImageView.setColorFilter(0);
-                }
-                if (color != 0) {
-                    mImageView.setImageResource(drawable1);
-                    mImageView.setColorFilter(color);
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-    }
-    private void setFocusChangeListener(final EditText editText) {
-
-        switch (editText.getId()) {
-            case R.id.edt_email:
-                addFocusChangeListener(img_email, edt_email, R.drawable.new_post, R.drawable.new_post_filled, 0);
-                break;
-            case R.id.edt_password:
-                addFocusChangeListener(img_password, edt_password, R.drawable.lock, R.drawable.lock_filled, 6);
-                break;
-        }
-    }
-    private void addFocusChangeListener(final ImageView mImageView, final EditText mEditText, final int drawable1, final int drawable3, final int mLength) {
-        mEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if(mEditText.getText().length() == 0) {
-                    if (hasFocus) {
-                        mImageView.setColorFilter(ContextCompat.getColor(LoginActivity.this, R.color.red));
-                    } else {
-                        mImageView.setColorFilter(ContextCompat.getColor(LoginActivity.this, R.color.icon_color));
-                    }
-                }
-            }
-        });
-    }
     private void call_ime_action() {
         edt_password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     doSignIn();
+                }
+                if(actionId == EditorInfo.IME_ACTION_NEXT){
+                    hideKeyboard(LoginActivity.this);
                 }
                 return false;
             }
@@ -158,9 +117,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             showTextView(txt_error, AppMessages.CommonSignInSignUpMessages.MIN_PASSWORD_CHECK);
             return;
         }
-        Intent i = new Intent(this, MemberValidationActivity.class);
+        if(spinner.getSelectedIndex()==0){
+            showTextView(txt_error, AppMessages.CommonSignInSignUpMessages.SELECT_VENDOR_NAME);
+            return;
+        }
+        Intent i = new Intent(this, TableBookingActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         i.putExtra("username", email);
         i.putExtra("password", password);
+        i.putExtra("vendor_detail",mSelectedVendor);
         startActivity(i);
 
 
@@ -181,5 +146,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
             }
         }, 3000);
+    }
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }

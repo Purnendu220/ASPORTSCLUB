@@ -4,10 +4,10 @@ public class TableBookingModel {
 
     private int id;
     private int tableNumber;
-    private boolean tableStatus;
+    private int tableStatus;
     private String tableName;
 
-    public TableBookingModel(int id, int tableNumber, boolean tableStatus, String tableName) {
+    public TableBookingModel(int id, int tableNumber, int tableStatus, String tableName) {
         this.id = id;
         this.tableNumber = tableNumber;
         this.tableStatus = tableStatus;
@@ -30,11 +30,11 @@ public class TableBookingModel {
         this.tableNumber = tableNumber;
     }
 
-    public boolean isTableStatus() {
+    public int isTableStatus() {
         return tableStatus;
     }
 
-    public void setTableStatus(boolean tableStatus) {
+    public void setTableStatus(int tableStatus) {
         this.tableStatus = tableStatus;
     }
 

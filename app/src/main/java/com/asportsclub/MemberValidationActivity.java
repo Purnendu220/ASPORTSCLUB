@@ -3,6 +3,7 @@ package com.asportsclub;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,10 +31,8 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
         edt_member_id = (EditText)findViewById(R.id.edt_member_id);
         txt_error = (TextView) findViewById(R.id.txt_error);
         btn_validate = (Button) findViewById(R.id.btn_validate);
-        img_member = (ImageView)findViewById(R.id.img_member);
         btn_validate.setOnClickListener(this);
-        username = getIntent().getStringExtra("username");
-        password = getIntent().getStringExtra("password");
+
 
 
     }
@@ -55,8 +54,7 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
             return;
         }
 
-        Intent i = new Intent(this, TableBookingActivity.class);
-        i.putExtra("member_id", member_id);
+        Intent i = new Intent(this, LoginActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(i);
         finish();

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#24DBCD</color>
-    <color name="colorPrimaryDark">#FF98F2EB</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#FF4E50</color>
+    <color name="colorPrimaryDark">#C12323</color>
+    <color name="colorAccent">#FFD32F</color>
     <color name="quiz_dialog_header">#373637</color>
     <color name="hint_color">#7F7F7F</color>
     <color name="txt_t_c">#9B9B9B</color>
     <color name="black">#000000</color>
     <color name="green">#02B597</color>
     <color name="white">#ffffff</color>
+    <color name="yellow">#F5E300</color>
 
     <color name="text_color_field">#7F7F7F</color>
     <color name="heading_card">#A5A4A5</color>
@@ -32,8 +33,8 @@
     <color name="grey">#B7BBC0</color>
     <color name="app_green">#21BBA6</color>
     <color name="app_green_light">#01d7a3</color>
-    <color name="button_gradient_green">#24DBCD</color>
-    <color name="button_gradient_green_lignt">#23D9CB</color>
+    <color name="button_gradient_green">#045b54</color>
+    <color name="button_gradient_green_lignt">#045b54</color>
     <color name="dark_green">#008870</color>
 
     <color name="mom_header_t_c">#414141</color>
@@ -60,5 +61,10 @@
     <color name="title_gray">#434343</color>
     <color name="chat_message_read_unread">#9B9B9B</color>
     <color name="table_booked">#24ffe600</color>
+
+    <color name="card_background">#ffffff</color>
+    <color name="card_shadow_1">#d4d4d4</color>
+    <color name="card_shadow_2">#dddddd</color>
+    <color name="card_detailing">#eee</color>
 
 </resources>

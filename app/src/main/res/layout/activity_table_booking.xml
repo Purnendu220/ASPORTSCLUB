@@ -1,36 +1,113 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TableBookingActivity"
-    >
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    tools:context=".TableBookingActivity">
 
     <TextView
         android:id="@+id/text_signin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/margin_20"
         android:layout_marginTop="@dimen/margin_40"
+        android:layout_marginBottom="@dimen/margin_20"
         android:gravity="center"
-        android:text="TABLE BOOKING"
+        android:text="@string/table_booking"
         android:textColor="@color/black"
-        android:textSize="@dimen/text16size" />
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_table_view"
+        android:textSize="@dimen/text16size"
+        android:visibility="visible"
+        />
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        card_view:cardElevation="20dp"
         android:layout_marginLeft="@dimen/margin_20"
         android:layout_marginRight="@dimen/margin_20"
-        android:layout_below="@+id/text_signin"
-        android:layout_marginBottom="@dimen/margin_20"
+        android:layout_marginBottom="@dimen/margin_80"
+        android:layout_marginTop="@dimen/margin_100"
+        android:background="@drawable/new_login_signup_background"
+        android:layout_gravity="center">
+
+    <LinearLayout
+        android:id="@+id/main_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
 
         >
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginLeft="@dimen/margin_100"
+            android:layout_marginRight="@dimen/margin_100"
+            android:layout_marginBottom="@dimen/margin_40"
+            android:layout_marginTop="@dimen/margin_20"
+            android:weightSum="2"
+            >
+<com.jaredrummler.materialspinner.MaterialSpinner
+    android:id="@+id/spinner_filter_one"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    />
 
-    </android.support.v7.widget.RecyclerView>
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/spinner_filter_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/margin_20"
+                />
+
+
+
+        </LinearLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_table_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/text_signin"
+            android:layout_marginLeft="@dimen/margin_100"
+            android:layout_marginRight="@dimen/margin_100">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+
+
+    </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <Button
+        android:id="@+id/btn_"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/margin_48"
+        android:layout_gravity="center"
+        android:background="@drawable/gradient_backgroung"
+        android:inputType="textCapCharacters"
+        android:text="PROCEED TO ORDER"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text16size"
+
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+
+        android:layout_marginBottom="@dimen/margin_20"
+        android:layout_marginRight="@dimen/margin_40"
+
+
+        />
+
+
+
+
 
 
 </RelativeLayout>

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">A SPORTS CLUB</string>
+    <string name="table_booking">SELECT TABLE OF YOUR CHOICE</string>
+    <string name="button">Button</string>
 </resources>

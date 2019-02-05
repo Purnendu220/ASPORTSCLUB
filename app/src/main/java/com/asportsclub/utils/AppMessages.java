@@ -9,7 +9,9 @@ public class AppMessages {
         String NO_PASSWORD = "Password is blank";
         String INVALID_EMAIL = "Invalid Email Address";
         String MIN_PASSWORD_CHECK = "Password must be min. 6 characters.";
-        String NO_MEMBERSHIP_ID = "Membership id is blank";
+        String NO_MEMBERSHIP_ID = "Please enter valig config url";
+        String SELECT_VENDOR_NAME = "Please select a valid vendor";
+
 
 
     }
