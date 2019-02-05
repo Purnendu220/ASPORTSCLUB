@@ -13,25 +13,36 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.asportsclub.rest.Response.GlobalVenderDetail;
+import com.asportsclub.rest.Response.GlobalVenderDetails;
+import com.asportsclub.rest.Response.ResponseModel;
+import com.asportsclub.rest.RestCallBack;
+import com.asportsclub.rest.RestServiceFactory;
 import com.asportsclub.utils.AppMessages;
 import com.asportsclub.utils.StringUtils;
+import com.asportsclub.utils.ToastUtils;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import retrofit2.Call;
+import retrofit2.Response;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    EditText edt_email,edt_password;
+    EditText edt_email, edt_password;
     Button btn_sign_in;
     TextView txt_error;
     MaterialSpinner spinner;
-    ArrayList<VenderDetailsModel> mListVendorDetails = new ArrayList<>();
+    ArrayList<GlobalVenderDetail> mListVendorDetails = new ArrayList<>();
     String mSelectedVendor;
 
 
@@ -40,8 +51,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        edt_email = (EditText)findViewById(R.id.edt_email);
-        edt_password = (EditText)findViewById(R.id.edt_password);
+        edt_email = (EditText) findViewById(R.id.edt_email);
+        edt_password = (EditText) findViewById(R.id.edt_password);
         txt_error = (TextView) findViewById(R.id.txt_error);
         btn_sign_in = (Button) findViewById(R.id.btn_sign_in);
         spinner = (MaterialSpinner) findViewById(R.id.spinner);
@@ -51,17 +62,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //        mListVendorDetails.add(new VenderDetailsModel(8,"LOUNGE BAR"));
 //        mListVendorDetails.add(new VenderDetailsModel(8,"RESTAURANT"));
         // spinner.setItems(mListVendorDetails);
+        hitApitogetGlobalConfiguration();
 
-
-        spinner.setItems("SELECT VENDOR", "COFFEE SHOP", "GARDEN VIEW BAR", "LOUNGE BAR", "RESTAURANT");
+      //  spinner.setItems("SELECT VENDOR", "COFFEE SHOP", "GARDEN VIEW BAR", "LOUNGE BAR", "RESTAURANT");
 
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
-            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                if(position>0){
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                if (position > 0) {
                     mSelectedVendor = item;
-                }
-                else{
+                } else {
                     mSelectedVendor = null;
                 }
                 Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
@@ -73,6 +84,31 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    private void hitApitogetGlobalConfiguration() {
+
+
+        Call<GlobalVenderDetails> commentsCall = RestServiceFactory.createService().getGlobalConfiguration(
+        );
+        commentsCall.enqueue(new RestCallBack<GlobalVenderDetails>() {
+            @Override
+            public void onFailure(Call<GlobalVenderDetails> call, String message) {
+                ToastUtils.show(LoginActivity.this,message);
+            }
+
+            @Override
+            public void onResponse(Call<GlobalVenderDetails> call, Response<GlobalVenderDetails> restResponse, GlobalVenderDetails response) {
+                if(response.getGlobalVenderDetails()!=null&& response.getGlobalVenderDetails().size()>0){
+                    mListVendorDetails.addAll(response.getGlobalVenderDetails());
+                    ArrayAdapter<GlobalVenderDetail> adapter =
+                            new ArrayAdapter<GlobalVenderDetail>(getApplicationContext(),  android.R.layout.simple_spinner_dropdown_item, mListVendorDetails);
+                    adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+
+                    spinner.setAdapter(adapter);
+                }
+            }
+        });
+    }
+
     private void call_ime_action() {
         edt_password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -80,13 +116,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     doSignIn();
                 }
-                if(actionId == EditorInfo.IME_ACTION_NEXT){
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
                     hideKeyboard(LoginActivity.this);
                 }
                 return false;
             }
         });
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -117,7 +154,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             showTextView(txt_error, AppMessages.CommonSignInSignUpMessages.MIN_PASSWORD_CHECK);
             return;
         }
-        if(spinner.getSelectedIndex()==0){
+        if (spinner.getSelectedIndex() == 0) {
             showTextView(txt_error, AppMessages.CommonSignInSignUpMessages.SELECT_VENDOR_NAME);
             return;
         }
@@ -125,9 +162,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         i.putExtra("username", email);
         i.putExtra("password", password);
-        i.putExtra("vendor_detail",mSelectedVendor);
+        i.putExtra("vendor_detail", mSelectedVendor);
         startActivity(i);
-
 
 
     }
@@ -147,6 +183,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }, 3000);
     }
+
     public static void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         //Find the currently focused view, so we can grab the correct window token from it.
