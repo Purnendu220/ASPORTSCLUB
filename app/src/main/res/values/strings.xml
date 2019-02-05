@@ -2,4 +2,6 @@
     <string name="app_name">A SPORTS CLUB</string>
     <string name="table_booking">SELECT TABLE OF YOUR CHOICE</string>
     <string name="button">Button</string>
+    <string name="no_internet">Please make sure you are connected to the internet.</string>
+    <string name="please_try_later">Try Again</string>
 </resources>
