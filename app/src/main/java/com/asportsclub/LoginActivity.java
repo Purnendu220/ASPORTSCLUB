@@ -13,17 +13,22 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.asportsclub.adapter.GlobalConfigAdapter;
 import com.asportsclub.rest.Response.GlobalVenderDetail;
 import com.asportsclub.rest.Response.GlobalVenderDetails;
 import com.asportsclub.rest.Response.ResponseModel;
 import com.asportsclub.rest.RestCallBack;
 import com.asportsclub.rest.RestServiceFactory;
+import com.asportsclub.utils.AppContext;
 import com.asportsclub.utils.AppMessages;
 import com.asportsclub.utils.StringUtils;
 import com.asportsclub.utils.ToastUtils;
@@ -41,41 +46,41 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     EditText edt_email, edt_password;
     Button btn_sign_in;
     TextView txt_error;
-    MaterialSpinner spinner;
+    Spinner spinner;
     ArrayList<GlobalVenderDetail> mListVendorDetails = new ArrayList<>();
     String mSelectedVendor;
+    GlobalConfigAdapter adapter;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        AppContext.getInstance().setContext(getApplication());
 
         edt_email = (EditText) findViewById(R.id.edt_email);
         edt_password = (EditText) findViewById(R.id.edt_password);
         txt_error = (TextView) findViewById(R.id.txt_error);
         btn_sign_in = (Button) findViewById(R.id.btn_sign_in);
-        spinner = (MaterialSpinner) findViewById(R.id.spinner);
-//        mListVendorDetails.add(new VenderDetailsModel(0,"SELECT VENDORP"));
-//        mListVendorDetails.add(new VenderDetailsModel(8,"COFFEE SHOP"));
-//        mListVendorDetails.add(new VenderDetailsModel(8,"GARDEN VIEW BAR"));
-//        mListVendorDetails.add(new VenderDetailsModel(8,"LOUNGE BAR"));
-//        mListVendorDetails.add(new VenderDetailsModel(8,"RESTAURANT"));
-        // spinner.setItems(mListVendorDetails);
+        spinner = (Spinner) findViewById(R.id.spinner);
+
         hitApitogetGlobalConfiguration();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                GlobalVenderDetail model = adapter.getItem(position);
+                if(model!=null){
+                    Toast.makeText(LoginActivity.this,model.getVenderName()+"",Toast.LENGTH_LONG);
+                    mSelectedVendor = model.getVenderName();
+                }else{
+                    mSelectedVendor = null;
 
-      //  spinner.setItems("SELECT VENDOR", "COFFEE SHOP", "GARDEN VIEW BAR", "LOUNGE BAR", "RESTAURANT");
-
-        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+                }
+            }
 
             @Override
-            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                if (position > 0) {
-                    mSelectedVendor = item;
-                } else {
-                    mSelectedVendor = null;
-                }
-                Snackbar.make(view, "Clicked " + item, Snackbar.LENGTH_LONG).show();
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
         btn_sign_in.setOnClickListener(this);
@@ -101,7 +106,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     for(int i=0;i<response.getGlobalVenderDetails().size();i++){
                         mListVendorDetails.add(new GlobalVenderDetail(response.getGlobalVenderDetails().get(i).getVenderId(),response.getGlobalVenderDetails().get(i).getVenderName()));
                     }
-                    spinner.setItems(mListVendorDetails);
+
+                    adapter=new GlobalConfigAdapter(LoginActivity.this,R.layout.spinner_item,mListVendorDetails);
+                    spinner.setAdapter(adapter);
                 }
             }
         });
@@ -152,7 +159,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             showTextView(txt_error, AppMessages.CommonSignInSignUpMessages.MIN_PASSWORD_CHECK);
             return;
         }
-        if (spinner.getSelectedIndex() == 0) {
+        if (mSelectedVendor!=null) {
             showTextView(txt_error, AppMessages.CommonSignInSignUpMessages.SELECT_VENDOR_NAME);
             return;
         }
