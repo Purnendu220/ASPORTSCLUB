@@ -1,5 +1,7 @@
 package com.asportsclub.rest.services;
 
+import com.asportsclub.rest.RequestModel.UserAuthenticateRequest;
+import com.asportsclub.rest.Response.AuthenticateUserResponse;
 import com.asportsclub.rest.Response.GlobalVenderDetail;
 import com.asportsclub.rest.Response.GlobalVenderDetails;
 import com.asportsclub.rest.Response.ResponseModel;
@@ -14,6 +16,8 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.Headers;
@@ -35,4 +39,10 @@ public interface ApiService {
     @Headers("Content-type: application/json")
     @GET(ServiceConstants.GLOBAL_CONFIGURATION)
     Call<GlobalVenderDetails> getGlobalConfiguration();
+
+    @FormUrlEncoded
+    @POST(ServiceConstants.AUTHENTICATEUSER)
+    Call<AuthenticateUserResponse> getAuthenticateUser(@Field("UserName") String username,
+                                                       @Field("UserPassword") String userpassword,
+                                                       @Field("VenderId") int venderID);
 }

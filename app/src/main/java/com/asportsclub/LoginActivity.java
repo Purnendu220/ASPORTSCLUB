@@ -23,6 +23,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.asportsclub.adapter.GlobalConfigAdapter;
+import com.asportsclub.rest.RequestModel.UserAuthenticateRequest;
+import com.asportsclub.rest.Response.AuthenticateUserResponse;
 import com.asportsclub.rest.Response.GlobalVenderDetail;
 import com.asportsclub.rest.Response.GlobalVenderDetails;
 import com.asportsclub.rest.Response.ResponseModel;
@@ -50,6 +52,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     ArrayList<GlobalVenderDetail> mListVendorDetails = new ArrayList<>();
     String mSelectedVendor;
     GlobalConfigAdapter adapter;
+    private int mSelectVenderId;
 
 
     @Override
@@ -72,6 +75,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if(model!=null){
                     Toast.makeText(LoginActivity.this,model.getVenderName()+"",Toast.LENGTH_LONG);
                     mSelectedVendor = model.getVenderName();
+                    mSelectVenderId=model.getVenderId();
                 }else{
                     mSelectedVendor = null;
 
@@ -151,25 +155,46 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             showTextView(txt_error, AppMessages.CommonSignInSignUpMessages.NO_PASSWORD);
             return;
         }
-        if (!StringUtils.isEmailValid(email)) {
-            showTextView(txt_error, AppMessages.CommonSignInSignUpMessages.INVALID_EMAIL);
-            return;
-        }
-        if (!StringUtils.isPasswordLengthValid(password, 6)) {
-            showTextView(txt_error, AppMessages.CommonSignInSignUpMessages.MIN_PASSWORD_CHECK);
-            return;
-        }
-        if (mSelectedVendor!=null) {
+//        if (!StringUtils.isEmailValid(email)) {
+//            showTextView(txt_error, AppMessages.CommonSignInSignUpMessages.INVALID_EMAIL);
+//            return;
+//        }
+//        if (!StringUtils.isPasswordLengthValid(password, 6)) {
+//            showTextView(txt_error, AppMessages.CommonSignInSignUpMessages.MIN_PASSWORD_CHECK);
+//            return;
+//        }
+        if (mSelectedVendor==null) {
             showTextView(txt_error, AppMessages.CommonSignInSignUpMessages.SELECT_VENDOR_NAME);
             return;
         }
-        Intent i = new Intent(this, TableBookingActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-        i.putExtra("username", email);
-        i.putExtra("password", password);
-        i.putExtra("vendor_detail", mSelectedVendor);
-        startActivity(i);
 
+        hitApiToAuthenticateUser(email,password,mSelectVenderId);
+
+
+
+    }
+
+    private void hitApiToAuthenticateUser(String email, String password, int mSelectVenderId) {
+
+        UserAuthenticateRequest userAuthenticateRequest=new UserAuthenticateRequest(email,password,mSelectVenderId);
+        Call<AuthenticateUserResponse> userResponseCall = RestServiceFactory.createService().getAuthenticateUser(email,password,mSelectVenderId
+        );
+        userResponseCall.enqueue(new RestCallBack<AuthenticateUserResponse>() {
+            @Override
+            public void onFailure(Call<AuthenticateUserResponse> call, String message) {
+                ToastUtils.show(LoginActivity.this,message);
+            }
+
+            @Override
+            public void onResponse(Call<AuthenticateUserResponse> call, Response<AuthenticateUserResponse> restResponse, AuthenticateUserResponse response) {
+                    if(response.getVenderTableDetails()!=null&&response.getVenderTableDetails().size()>0){
+                        Intent i = new Intent(LoginActivity.this, TableBookingActivity.class);
+                        i.putExtra("vernderDetail", response);
+                        startActivity(i);
+
+                    }
+            }
+        });
 
     }
 

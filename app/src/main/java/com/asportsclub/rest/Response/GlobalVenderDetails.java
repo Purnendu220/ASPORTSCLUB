@@ -1,14 +1,17 @@
 
 package com.asportsclub.rest.Response;
 
-import java.io.Serializable;
 import java.util.List;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-public class GlobalVenderDetails implements Serializable {
+public class GlobalVenderDetails {
 
-
+    @SerializedName("StatusCode")
+    @Expose
     private StatusCode statusCode;
-
+    @SerializedName("GlobalVenderDetails")
+    @Expose
     private List<GlobalVenderDetail> globalVenderDetails = null;
 
     public StatusCode getStatusCode() {
