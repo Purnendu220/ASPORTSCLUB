@@ -1,5 +1,6 @@
 package com.asportsclub.rest.services;
 
+import com.asportsclub.rest.Response.AuthenticateUserResponse;
 import com.asportsclub.rest.Response.GlobalVenderDetail;
 import com.asportsclub.rest.Response.GlobalVenderDetails;
 import com.asportsclub.rest.Response.MembershipDetail;

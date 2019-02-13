@@ -69,7 +69,6 @@
 
     <dimen name="text_30">30sp</dimen>
     <dimen name="margin_5">5dp</dimen>
-    <dimen name="margin_2.5">2.5dp</dimen>
     <dimen name="text16size">16sp</dimen>
 
     <dimen name="margin_70">70dp</dimen>
