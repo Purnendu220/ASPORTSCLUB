@@ -2,6 +2,7 @@ package com.asportsclub.rest.services;
 
 import com.asportsclub.rest.Response.GlobalVenderDetail;
 import com.asportsclub.rest.Response.GlobalVenderDetails;
+import com.asportsclub.rest.Response.MenuItems;
 import com.asportsclub.rest.Response.ResponseModel;
 import com.google.gson.JsonObject;
 
@@ -35,4 +36,9 @@ public interface ApiService {
     @Headers("Content-type: application/json")
     @GET(ServiceConstants.GLOBAL_CONFIGURATION)
     Call<GlobalVenderDetails> getGlobalConfiguration();
+
+    @Headers("Content-type: application/json")
+    @GET(ServiceConstants.ITEM_LIST)
+    Call<MenuItems> getItemList(@Query(ServiceConstants.VENDER_ID) int venderId);
+
 }

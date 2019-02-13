@@ -9,6 +9,12 @@ public class ServiceConstants {
     public static final String BASE_SERVICE_URL = "http://app.technyk.com/api/";
 
     public static final String GLOBAL_CONFIGURATION = "GetGlobalConfiguration";
+    public static final String ITEM_LIST = "GetMenuDetails";
+    public static final String VENDER_ID = "VenderId";
+
+
+
+
     public static final String SERVICE_USER = "/userservice/api/v3/user";
     public static final String MIDL_API_TYPEAHED = "/midl/api/v3/typeahed";
     public static final String SERVICE_BOARD = "/midl/api/v3/board";

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="10"
+        android:layout_marginTop="@dimen/margin_5"
+        android:layout_marginBottom="@dimen/margin_5"
+        >
+
+    <TextView
+        android:id="@+id/txtItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Item Name"
+        android:layout_weight="4"
+        />
+
+    <TextView
+        android:id="@+id/txtItemPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Price"
+        android:layout_weight="2"
+
+        />
+    <TextView
+        android:id="@+id/txtItemQuantity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Quantity"
+        android:layout_weight="1"
+
+        />
+    <TextView
+        android:id="@+id/txtItemGst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GST"
+        android:layout_weight="1"
+
+        />
+
+    <TextView
+        android:id="@+id/txtItemFinalPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Final Price"
+        android:layout_weight="2"
+
+        />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

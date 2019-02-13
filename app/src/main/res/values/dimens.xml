@@ -93,4 +93,15 @@
     <dimen name="bottom_text_size">10sp</dimen>
     <dimen name="margin_2">2dp</dimen>
     <dimen name="margin_120">120dp</dimen>
+
+    <dimen name="line_spacing_extra">6sp</dimen>
+    <dimen name="line_spacing_extra_title">4sp</dimen>
+    <dimen name="button_letter_spacing_very_little">-0.01</dimen>
+    <dimen name="button_letter_spacing_little">0.01</dimen>
+    <dimen name="button_letter_spacing">0.04</dimen>
+    <dimen name="text_medium_letter_spacing">0.01</dimen>
+    <dimen name="text_title_letter_spacing">0.02</dimen>
+    <dimen name="text_title_letter_extra_spacing">0.12</dimen>
+    <dimen name="text_title_letter_extra_extra_spacing">0.21</dimen>
+    <dimen name="text_large">16sp</dimen>
 </resources>
