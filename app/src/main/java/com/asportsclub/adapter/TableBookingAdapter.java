@@ -10,6 +10,7 @@ import android.content.Context;
         import com.asportsclub.ListLoader;
 import com.asportsclub.R;
 import com.asportsclub.TableBookingModel;
+import com.asportsclub.rest.Response.VenderTableDetail;
 import com.asportsclub.utils.AdapterCallbacks;
 import com.asportsclub.viewholder.EmptyViewHolder;
 import com.asportsclub.viewholder.LoaderViewHolder;
@@ -24,16 +25,16 @@ public class TableBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int VIEW_TYPE_CLASS = 1;
     private static final int VIEW_TYPE_LOADER = 2;
 
-    private final AdapterCallbacks<TableBookingModel> adapterCallbacks;
+    private final AdapterCallbacks<VenderTableDetail> adapterCallbacks;
 
-    private List<Object> list;
+    private List<VenderTableDetail> list;
     private Context context;
 
 
     private boolean showLoader;
     private ListLoader listLoader;
 
-    public TableBookingAdapter(Context context, boolean showLoader, AdapterCallbacks<TableBookingModel> adapterCallbacks) {
+    public TableBookingAdapter(Context context, boolean showLoader, AdapterCallbacks<VenderTableDetail> adapterCallbacks) {
         this.adapterCallbacks = adapterCallbacks;
         this.context = context;
         list = new ArrayList<>();
@@ -42,18 +43,18 @@ public class TableBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         listLoader = new ListLoader(true, "No more tables");
     }
 
-    public List<Object> getList() {
+    public List<VenderTableDetail> getList() {
         return list;
     }
 
-    public void addClass(TableBookingModel model) {
+    public void addClass(VenderTableDetail model) {
         list.add(model);
-        addLoader();
+       // addLoader();
     }
 
-    public void addAllTableData(List<TableBookingModel> models) {
+    public void addAllTableData(List<VenderTableDetail> models) {
         list.addAll(models);
-        addLoader();
+       // addLoader();
     }
 
     public void clearAll() {
@@ -76,7 +77,7 @@ public class TableBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private void addLoader() {
         if (showLoader) {
             list.remove(listLoader);
-            list.add(listLoader);
+
         }
     }
 
@@ -86,7 +87,7 @@ public class TableBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         int itemViewType = VIEW_TYPE_UNKNOWN;
 
         Object item = getItem(position);
-        if (item instanceof TableBookingModel) {
+        if (item instanceof VenderTableDetail) {
             itemViewType = VIEW_TYPE_CLASS;
         } else if (item instanceof ListLoader) {
             itemViewType = VIEW_TYPE_LOADER;
@@ -111,7 +112,7 @@ public class TableBookingAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof TableBookingViewHolder) {
-            ((TableBookingViewHolder) holder).bind((TableBookingModel) getItem(position), adapterCallbacks, position);
+            ((TableBookingViewHolder) holder).bind((VenderTableDetail) getItem(position), adapterCallbacks, position);
         } else if (holder instanceof LoaderViewHolder) {
             ((LoaderViewHolder) holder).bind(listLoader, adapterCallbacks);
             if (position == getItemCount() - 1 && !listLoader.isFinish()) {

@@ -4,4 +4,8 @@
     <string name="button">Button</string>
     <string name="no_internet">Please make sure you are connected to the internet.</string>
     <string name="please_try_later">Try Again</string>
+    <string name="enter_membership_id">Enter Membership Id</string>
+    <string name="membership_validation">Membership Validation</string>
+    <string name="validate">VALIDATE</string>
+    <string name="close">close</string>
 </resources>

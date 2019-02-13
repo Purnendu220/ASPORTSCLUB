@@ -7,90 +7,112 @@
     android:background="@color/white"
     android:clickable="false"
     android:orientation="vertical"
-    android:paddingTop="@dimen/margin_80"
-    android:paddingBottom="@dimen/margin_80"
-    android:paddingRight="200dp"
-    android:paddingLeft="200dp">
+    android:paddingLeft="100dp"
+    android:paddingTop="@dimen/margin_50"
+    android:paddingRight="100dp"
+    android:paddingBottom="@dimen/margin_20">
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        card_view:cardElevation="20dp"
-        android:layout_marginBottom="@dimen/thirty_dp"
+        android:layout_gravity="top"
         android:layout_marginLeft="@dimen/thirty_dp"
-        android:layout_marginRight="@dimen/thirty_dp"
         android:layout_marginTop="@dimen/twenty_dp"
+        android:layout_marginRight="@dimen/thirty_dp"
+        android:layout_marginBottom="@dimen/thirty_dp"
         android:background="@drawable/new_login_signup_background"
-        android:layout_gravity="center">
+        card_view:cardElevation="20dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical">
-
-
-        <TextView
-            android:id="@+id/text_signin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/margin_10"
-            android:layout_marginTop="@dimen/margin_40"
-            android:gravity="center"
-            android:text="Membership Validation"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text16size" />
-
-        <TextView
-            android:id="@+id/txt_error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_15"
-            android:gravity="center"
-
-            android:textColor="@color/red"
-            android:visibility="visible" />
-
-        <android.support.design.widget.TextInputLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_120"
-            android:layout_marginRight="@dimen/margin_120"
-            android:layout_marginTop="@dimen/margin_15"
-            >
-
-            <EditText
-                android:id="@+id/edt_member_id"
-                style="@style/edittext_forgot"
-                android:hint="Enter Membership Id"
-                android:imeOptions="actionDone"
-                android:inputType="textNoSuggestions|text" />
-        </android.support.design.widget.TextInputLayout>
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:gravity="top"
+            android:orientation="vertical">
 
 
+            <TextView
+                android:id="@+id/text_signin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_50"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:gravity="center_horizontal"
+                android:text="@string/membership_validation"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="@dimen/text16size" />
+
+            <TextView
+                android:id="@+id/txt_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/margin_15"
+                android:gravity="center"
+
+                android:textColor="@color/red"
+                android:visibility="visible" />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/cardview_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/margin_120"
+                android:layout_marginTop="@dimen/margin_15"
+                android:layout_marginRight="@dimen/margin_120">
+
+                <EditText
+                    android:id="@+id/edt_member_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/enter_membership_id"
+                    android:imeOptions="actionDone"
+                    android:inputType="textNoSuggestions|text" />
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutCreate"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="bottom"
+                android:layout_marginLeft="@dimen/margin_150"
+                android:layout_marginTop="@dimen/twenty_dp"
+                android:layout_marginRight="@dimen/margin_150"
+                android:layout_marginBottom="@dimen/margin_50"
+                android:background="@drawable/gradient_backgroung"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="#FFFFFF"
+                    android:indeterminateTintMode="src_atop"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/btn_validate"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/margin_48"
+                    android:inputType="textCapCharacters"
+                    android:text="@string/validate"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text16size" />
+            </LinearLayout>
 
 
 
-        <Button
-            android:id="@+id/btn_validate"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/margin_48"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/margin_150"
-            android:layout_marginRight="@dimen/margin_150"
-            android:layout_marginTop="@dimen/twenty_dp"
-            android:layout_marginBottom="@dimen/margin_100"
-            android:background="@drawable/gradient_backgroung"
-            android:inputType="textCapCharacters"
-            android:text="VALIDATE"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text16size" />
-
-
-    </LinearLayout>
-</android.support.v7.widget.CardView>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 </LinearLayout>
 
