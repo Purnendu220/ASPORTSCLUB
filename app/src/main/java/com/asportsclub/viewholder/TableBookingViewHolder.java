@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.asportsclub.R;
 import com.asportsclub.TableBookingModel;
+import com.asportsclub.rest.Response.VenderTableDetail;
 import com.asportsclub.utils.AdapterCallbacks;
 
 public class TableBookingViewHolder extends RecyclerView.ViewHolder {
@@ -23,14 +24,14 @@ public class TableBookingViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void bind(final TableBookingModel model, final AdapterCallbacks adapterCallbacks, final int position) {
-        if(model.isTableStatus()==0){
+    public void bind(final VenderTableDetail model, final AdapterCallbacks adapterCallbacks, final int position) {
+        if(model.getTableStatus()==0){
             textViewTable.setBackgroundColor(context.getResources().getColor(R.color.app_green));
         }
-        else if(model.isTableStatus()==1){
+        else if(model.getTableStatus()==1){
             textViewTable.setBackgroundColor(context.getResources().getColor(R.color.hint_color));
         }
-        else if(model.isTableStatus()==2){
+        else if(model.getTableStatus()==2){
             textViewTable.setBackgroundColor(context.getResources().getColor(R.color.table_booked));
         }
         textViewTable.setText(model.getTableName());

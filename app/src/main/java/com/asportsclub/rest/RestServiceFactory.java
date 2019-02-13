@@ -11,6 +11,7 @@ import com.asportsclub.rest.services.ApiService;
 import com.asportsclub.rest.services.ServiceConstants;
 import com.asportsclub.utils.AppConstants;
 import com.asportsclub.utils.AppContext;
+import com.asportsclub.utils.AppSharedPreferences;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +52,7 @@ public class RestServiceFactory {
 
     private static Retrofit retrofit;
 
-    private static ApiService apiService;
+    public static ApiService apiService;
     private static X509TrustManager x509TrustManager;
 
     private static <S> S createService(Class<S> serviceClass) {
@@ -80,7 +81,7 @@ public class RestServiceFactory {
             String baseUrl = "";
 
 
-                    baseUrl = ServiceConstants.BASE_SERVICE_URL;
+                    baseUrl = AppSharedPreferences.getInstance(AppContext.getInstance().getContext()).getURL();
 
 
 
