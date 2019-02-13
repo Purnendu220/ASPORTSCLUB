@@ -4,7 +4,10 @@ import com.asportsclub.rest.RequestModel.UserAuthenticateRequest;
 import com.asportsclub.rest.Response.AuthenticateUserResponse;
 import com.asportsclub.rest.Response.GlobalVenderDetail;
 import com.asportsclub.rest.Response.GlobalVenderDetails;
+import com.asportsclub.rest.Response.MembershipDetail;
 import com.asportsclub.rest.Response.ResponseModel;
+import com.asportsclub.rest.Response.VenderTableDetail;
+import com.asportsclub.rest.Response.VenderTableDetails;
 import com.google.gson.JsonObject;
 
 
@@ -45,4 +48,11 @@ public interface ApiService {
     Call<AuthenticateUserResponse> getAuthenticateUser(@Field("UserName") String username,
                                                        @Field("UserPassword") String userpassword,
                                                        @Field("VenderId") int venderID);
+    @Headers("Content-type: application/json")
+    @GET(ServiceConstants.TABLEDATAFROMVENDERID)
+    Call<VenderTableDetails> getTableDataFromvenderId(@Query("VenderId") int venderId);
+
+    @Headers("Content-type: application/json")
+    @GET(ServiceConstants.MEMBERSHIPVALIDATION)
+    Call<MembershipDetail> getMembershipValidation(@Query("MembershipId") String membershipId);
 }

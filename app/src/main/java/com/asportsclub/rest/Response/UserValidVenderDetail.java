@@ -8,19 +8,23 @@ import java.io.Serializable;
 
 public class UserValidVenderDetail implements Serializable {
 
-    @SerializedName("VenderCode")
+    @SerializedName("VenderId")
     @Expose
-    private int venderCode;
+    private Integer VenderId;
     @SerializedName("VenderName")
     @Expose
     private String venderName;
-
-    public int getVenderCode() {
-        return venderCode;
+    public UserValidVenderDetail(Integer venderId, String venderName) {
+        this.VenderId = venderId;
+        this.venderName = venderName;
     }
 
-    public void setVenderCode(int venderCode) {
-        this.venderCode = venderCode;
+    public Integer getVenderId() {
+        return VenderId;
+    }
+
+    public void setVenderId(Integer VenderId) {
+        this.VenderId = VenderId;
     }
 
     public String getVenderName() {

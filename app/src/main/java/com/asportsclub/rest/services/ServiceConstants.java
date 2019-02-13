@@ -6,10 +6,12 @@ package com.asportsclub.rest.services;
  */
 public class ServiceConstants {
 
-    public static final String BASE_SERVICE_URL = "http://app.technyk.com/api/";
+    public static final String BASE_SERVICE_URL = "http://app.technyk.com";
 
-    public static final String GLOBAL_CONFIGURATION = "GetGlobalConfiguration";
-    public static final String AUTHENTICATEUSER = "AuthenticateUser";
+    public static final String GLOBAL_CONFIGURATION = "/api/GetGlobalConfiguration";
+    public static final String AUTHENTICATEUSER = "/api/AuthenticateUser";
+    public static final String TABLEDATAFROMVENDERID="/api/GetVenderTableInfo";
+    public static final String MEMBERSHIPVALIDATION="/api/ValidateMembershipId";
 
     public static final String SERVICE_SUCCESS_CODE = "2XX";
     public static final String SERVICE_FAILURE_CODE = "4XX";

@@ -16,7 +16,7 @@ public class AuthenticateUserResponse implements Serializable {
     private String businessDate;
     @SerializedName("UserDetail")
     @Expose
-    private Object userDetail;
+    private UserDetail userDetail;
     @SerializedName("UserValidVenderDetails")
     @Expose
     private List<UserValidVenderDetail> userValidVenderDetails = null;
@@ -40,11 +40,11 @@ public class AuthenticateUserResponse implements Serializable {
         this.businessDate = businessDate;
     }
 
-    public Object getUserDetail() {
+    public UserDetail getUserDetail() {
         return userDetail;
     }
 
-    public void setUserDetail(Object userDetail) {
+    public void setUserDetail(UserDetail userDetail) {
         this.userDetail = userDetail;
     }
 

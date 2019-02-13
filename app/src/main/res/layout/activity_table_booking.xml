@@ -6,22 +6,45 @@
     android:layout_height="match_parent"
     tools:context=".TableBookingActivity">
 
-    <TextView
-        android:id="@+id/text_signin"
+    <RelativeLayout
+        android:id="@+id/header_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/margin_40"
-        android:layout_marginBottom="@dimen/margin_10"
-        android:gravity="center"
-        android:text="@string/table_booking"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text16size"
-        android:visibility="gone" />
+        android:layout_height="45dp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/text_signin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Table Booking"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+
+        <ImageView
+            android:id="@+id/imageviewSetting"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingTop="@dimen/margin_10"
+            android:paddingBottom="@dimen/margin_10"
+            android:src="@drawable/ic_edit" />
+
+        <ImageView
+            android:id="@+id/imageviewLogout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/imageviewSetting"
+            android:layout_toStartOf="@+id/imageviewSetting"
+            android:paddingTop="@dimen/margin_10"
+            android:paddingBottom="@dimen/margin_10"
+            android:src="@drawable/settings_icon" />
+    </RelativeLayout>
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/header_layout"
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/margin_20"
         android:layout_marginTop="@dimen/margin_20"
@@ -54,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <com.jaredrummler.materialspinner.MaterialSpinner
+                <Spinner
                     android:id="@+id/spinner_filter_two"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -70,14 +93,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/text_signin"
-                android:layout_marginLeft="@dimen/margin_100"
-                android:layout_marginRight="@dimen/margin_100">
+                android:layout_marginLeft="@dimen/margin_80"
+                android:layout_marginRight="@dimen/margin_80">
 
 
             </android.support.v7.widget.RecyclerView>
 
 
         </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
     </android.support.v7.widget.CardView>
 
     <Button

@@ -13,7 +13,7 @@ public class StatusCode implements Serializable {
     private int errorCode;
     @SerializedName("ErrorMessage")
     @Expose
-    private Object errorMessage;
+    private String errorMessage;
 
     public int getErrorCode() {
         return errorCode;
@@ -23,11 +23,11 @@ public class StatusCode implements Serializable {
         this.errorCode = errorCode;
     }
 
-    public Object getErrorMessage() {
+    public String getErrorMessage() {
         return errorMessage;
     }
 
-    public void setErrorMessage(Object errorMessage) {
+    public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
