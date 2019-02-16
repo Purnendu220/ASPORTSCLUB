@@ -7,6 +7,7 @@
     tools:context=".ItemActivity">
 
     <LinearLayout
+        android:id="@+id/layoutItemsView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/margin_20"
@@ -14,27 +15,114 @@
         >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/itemView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             >
 
 
         </android.support.v7.widget.RecyclerView>
-
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/itemSelectedView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/grey_light"
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/margin_20"
+            android:layout_marginLeft="@dimen/margin_20"
+            android:weightSum="10"
             >
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:layout_weight="8"
+                >
 
 
-        </android.support.v7.widget.RecyclerView>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/itemSelectedView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none"
+                    android:visibility="visible"
+                    />
+
+                <include
+                    layout="@layout/empty_screen_layout"
+                    android:visibility="gone" />
 
 
+
+            </FrameLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutTotal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_below="@+id/layoutItemsView"
+                android:layout_weight="2"
+
+
+                >
+                <LinearLayout
+                    android:id="@+id/linearTotalLayout"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="@dimen/margin_10"
+
+                    >
+                    <TextView
+                        android:id="@+id/txtTotal"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="TOTAL"
+                        android:textSize="@dimen/text20Size"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:gravity="right"
+                        />
+
+                    <TextView
+                        android:id="@+id/txtTotalValue"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Rs. 200000"
+                        android:textSize="@dimen/text20Size"
+                        android:textStyle="bold"
+                        android:gravity="right"
+
+
+                        />
+
+
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btn_proceed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="@dimen/margin_10"
+                    android:background="@drawable/gradient_backgroung"
+                    android:inputType="textCapCharacters"
+                    android:text="PROCEED TO ORDER"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text16size"
+                    android:layout_below="@+id/linearTotalLayout"
+
+
+                    />
+
+            </RelativeLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 

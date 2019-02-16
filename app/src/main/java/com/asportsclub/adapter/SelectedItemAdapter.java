@@ -17,13 +17,12 @@ import com.asportsclub.viewholder.ItemViewHolder;
 import com.asportsclub.viewholder.LoaderViewHolder;
 import com.asportsclub.viewholder.SelectedItemHeaderViewHolder;
 import com.asportsclub.viewholder.SelectedItemViewHolder;
-import com.brandongogetap.stickyheaders.exposed.StickyHeaderHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class SelectedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements StickyHeaderHandler {
+public class SelectedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>  {
     private static final int VIEW_TYPE_UNKNOWN = -1;
     private static final int VIEW_TYPE_ITEM = 1;
     private static final int VIEW_TYPE_LOADER = 2;
@@ -63,6 +62,15 @@ public class SelectedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         addLoader();
         notifyDataSetChanged();
 
+    }
+    public void removeItem(int position) {
+        try{
+            list.remove(position);
+            notifyDataSetChanged();
+
+        }catch(Exception e){
+
+        }
     }
     public void addHeader(ItemHeaderModel model){
         list.add(model);
@@ -134,7 +142,7 @@ public class SelectedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        if (holder instanceof ItemViewHolder) {
+        if (holder instanceof SelectedItemViewHolder) {
             ((SelectedItemViewHolder) holder).bind((Item) getItem(position), adapterCallbacks, position);
         }
         else if (holder instanceof SelectedItemHeaderViewHolder) {
@@ -163,10 +171,7 @@ public class SelectedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
 
-    @Override
-    public List<?> getAdapterData() {
-        return list;
-    }
+
 }
 
 

@@ -55,6 +55,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
     private ProgressBar progressBar;
     private Context context;
     private ImageView imageViewLogout,imageViewSetting;
+    private int selctedVenderId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
         setContentView(R.layout.activity_table_booking);
         context = this;
         authenticateUserResponse = (AuthenticateUserResponse) getIntent().getSerializableExtra("vernderDetail");
+        selctedVenderId = authenticateUserResponse.getUserValidVenderDetails().get(0).getVenderId();
 
         recycler_table_view = (RecyclerView) findViewById(R.id.recycler_table_view);
         filterSpinner1 = (MaterialSpinner) findViewById(R.id.spinner_filter_one);
@@ -168,7 +170,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
 
     }
 
-    private void hitApiTogetTableFromVenderId(int venderId) {
+    private void hitApiTogetTableFromVenderId(final int venderId) {
         Call<VenderTableDetails> commentsCall = RestServiceFactory.createService().getTableDataFromvenderId(venderId
         );
         commentsCall.enqueue(new RestCallBack<VenderTableDetails>() {
@@ -185,6 +187,8 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                     authenticateUserResponse.setVenderTableDetails(response.getVenderTableDetails());
                     AppSharedPreferences.getInstance().setTableInfo(authenticateUserResponse);
                     setTableData();
+                    selctedVenderId = venderId;
+
                 }
                 else{
                     ToastUtils.show(context,response.getStatusCode().getErrorMessage());
@@ -287,6 +291,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                 }
                 Intent intent = new Intent(context, MemberValidationActivity.class);
                 intent.putExtra("tableId", selectedSeat);
+                intent.putExtra("selctedVenderId",selctedVenderId);
                 startActivity(intent);
             }
         } catch (Exception e) {

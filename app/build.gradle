@@ -43,6 +43,5 @@ dependencies {
     configurations.all {
         exclude group: 'com.android.support', module: 'support-v13'
     }
-    implementation 'com.brandongogetap:stickyheaders:0.5.0'
 
 }

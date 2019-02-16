@@ -12,13 +12,13 @@ import com.asportsclub.R;
 import com.asportsclub.rest.Response.Item;
 import com.asportsclub.utils.AdapterCallbacks;
 
+import java.text.DecimalFormat;
+
 
 public class SelectedItemViewHolder extends RecyclerView.ViewHolder {
 
-    LinearLayout itemDesc;
-    TextView textItemName,textItemRate,textItemQuantity;
-    ImageView minusButton,plusButton;
-    View plusButtonView,minusButtonView;
+    TextView textItemName,textItemRate,textItemQuantity,txtItemGst,txtItemFinalPrice;
+
     private Context context;
 
 
@@ -26,34 +26,27 @@ public class SelectedItemViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         context = itemView.getContext();
 
-        itemDesc = (LinearLayout)itemView.findViewById(R.id.itemDesc);
-        textItemName = (TextView)itemView.findViewById(R.id.textItemName);
-        textItemRate = (TextView)itemView.findViewById(R.id.textItemRate);
-        textItemQuantity = (TextView)itemView.findViewById(R.id.textItemQuantity);
 
-        minusButton=(ImageView)itemView.findViewById(R.id.minusButton);
-        plusButton=(ImageView)itemView.findViewById(R.id.plusButton);
-
-        plusButtonView=(View)itemView.findViewById(R.id.plusButtonView);
-        minusButtonView=(View)itemView.findViewById(R.id.minusButtonView);
-
+        textItemName = (TextView)itemView.findViewById(R.id.txtItemName);
+        textItemRate = (TextView)itemView.findViewById(R.id.txtItemPrice);
+        textItemQuantity = (TextView)itemView.findViewById(R.id.txtItemQuantity);
+        txtItemGst = (TextView)itemView.findViewById(R.id.txtItemGst);
+        txtItemFinalPrice = (TextView)itemView.findViewById(R.id.txtItemFinalPrice);
 
     }
 
     public void bind(final Item model, final AdapterCallbacks adapterCallbacks, final int position) {
+
         textItemName.setText(model.getItemName());
-        textItemRate.setText("Rs "+model.getItemRate());
-        if(model.getItemQuantity()>0){
-            textItemQuantity.setText(model.getItemQuantity()+" ");
-            minusButton.setVisibility(View.VISIBLE);
-            minusButtonView.setVisibility(View.VISIBLE);
-        }else{
-            textItemQuantity.setText("ADD");
-            minusButton.setVisibility(View.GONE);
-            minusButtonView.setVisibility(View.GONE);
+        textItemRate.setText(model.getItemRate()+"");
+        textItemQuantity.setText(model.getItemQuantity()+"");
+        txtItemGst.setText(model.getTaxPercentage()+"");
+
+        double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getTaxPercentage())/100) + (model.getItemRate() * model.getItemQuantity());
 
 
-        }
+        txtItemFinalPrice.setText(new DecimalFormat("##.##").format(finalprice)+"");
+
 
 
 

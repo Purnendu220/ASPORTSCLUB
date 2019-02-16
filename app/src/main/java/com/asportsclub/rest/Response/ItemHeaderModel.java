@@ -1,8 +1,7 @@
 package com.asportsclub.rest.Response;
 
-import com.brandongogetap.stickyheaders.exposed.StickyHeader;
 
-public class ItemHeaderModel implements StickyHeader {
+public class ItemHeaderModel {
 
     String itemName;
     String itemPrice;
