@@ -18,6 +18,7 @@ public class AppSharedPreferences {
     private static final String URL = "url";
     private static final String USERNAME = "username";
     private static final String VENDORID="vendorid";
+    private static final String VALIDURL="check";
 
 
     //From v2...
@@ -55,8 +56,19 @@ public class AppSharedPreferences {
     }
 
 
+
+
     public String getURL() {
         return mPrefs.getString(URL, "");
+    }
+
+    public void setValidurl(String value) {
+        mPrefsEditor.putString(VALIDURL, value);
+        mPrefsEditor.commit();
+    }
+
+    public String getValidurl() {
+        return mPrefs.getString(VALIDURL, "");
     }
 
     public void setUrl(String value) {
@@ -103,6 +115,8 @@ public class AppSharedPreferences {
         mPrefsEditor.putString(PREF_USERINFO, value);
         mPrefsEditor.commit();
     }
+
+
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////

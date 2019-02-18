@@ -25,7 +25,7 @@ private Context context;
 
             @Override
             public void onFinish() {
-                if(AppSharedPreferences.getInstance().getURL().isEmpty()){
+                if(!AppSharedPreferences.getInstance().getValidurl().equalsIgnoreCase("yes")){
                     Intent in=new Intent(context,GlobalConfigurationActivity.class);
                     startActivity(in);
                 }else if(AppSharedPreferences.getInstance().getUserName().isEmpty()){
