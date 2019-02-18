@@ -4,7 +4,9 @@ package com.asportsclub.rest.Response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ItemDetail {
+import java.io.Serializable;
+
+public class ItemDetail implements Serializable {
 
     @SerializedName("ItemCode")
     @Expose

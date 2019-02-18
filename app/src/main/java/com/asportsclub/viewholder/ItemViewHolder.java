@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.asportsclub.R;
+import com.asportsclub.RefrenceWrapper;
 import com.asportsclub.rest.Response.Item;
 import com.asportsclub.utils.AdapterCallbacks;
 
@@ -38,6 +39,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
         plusButtonView=(View)itemView.findViewById(R.id.plusButtonView);
         minusButtonView=(View)itemView.findViewById(R.id.minusButtonView);
+
+        RefrenceWrapper.getRefrenceWrapper(context).getFontTypeFace().setRobotoBoldTypeFace(context,textItemQuantity);
+        RefrenceWrapper.getRefrenceWrapper(context).getFontTypeFace().setRobotoItalicTypeFace(context,textItemName,textItemRate);
 
 
     }

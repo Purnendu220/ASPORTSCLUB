@@ -3,6 +3,7 @@ package com.asportsclub.rest.services;
 import com.asportsclub.rest.Response.AuthenticateUserResponse;
 import com.asportsclub.rest.Response.GlobalVenderDetail;
 import com.asportsclub.rest.Response.GlobalVenderDetails;
+import com.asportsclub.rest.Response.ItemBillDetail;
 import com.asportsclub.rest.Response.MembershipDetail;
 import com.asportsclub.rest.Response.MenuItems;
 import com.asportsclub.rest.Response.ResponseModel;
@@ -59,5 +60,11 @@ public interface ApiService {
     @Headers("Content-type: application/json")
     @GET(ServiceConstants.ITEM_LIST)
     Call<MenuItems> getItemList(@Query(ServiceConstants.VENDER_ID) int venderId);
+
+    @FormUrlEncoded
+    @POST(ServiceConstants.BILLDETAILS)
+    Call<ItemBillDetail> getBillDetail(@Field("BillNumber") int billnumber,
+                                       @Field("LocationCode") int locationcode
+                                                      );
 
 }

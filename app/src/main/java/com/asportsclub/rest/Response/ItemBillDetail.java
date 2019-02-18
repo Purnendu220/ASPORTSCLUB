@@ -4,14 +4,16 @@ package com.asportsclub.rest.Response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class BillDetails {
+import java.io.Serializable;
+
+public class ItemBillDetail implements Serializable {
 
     @SerializedName("StatusCode")
     @Expose
     private StatusCode statusCode;
     @SerializedName("BillDetails")
     @Expose
-    private BillDetails_ billDetails;
+    private BillDetails billDetails;
 
     public StatusCode getStatusCode() {
         return statusCode;
@@ -21,11 +23,11 @@ public class BillDetails {
         this.statusCode = statusCode;
     }
 
-    public BillDetails_ getBillDetails() {
+    public BillDetails getBillDetails() {
         return billDetails;
     }
 
-    public void setBillDetails(BillDetails_ billDetails) {
+    public void setBillDetails(BillDetails billDetails) {
         this.billDetails = billDetails;
     }
 

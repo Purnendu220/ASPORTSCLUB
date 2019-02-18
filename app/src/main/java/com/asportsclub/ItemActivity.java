@@ -1,16 +1,23 @@
 package com.asportsclub;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.asportsclub.adapter.MenuItemAdapter;
 import com.asportsclub.adapter.SelectedItemAdapter;
 import com.asportsclub.rest.Response.Item;
@@ -20,6 +27,8 @@ import com.asportsclub.rest.Response.MenuItems;
 import com.asportsclub.rest.RestCallBack;
 import com.asportsclub.rest.RestServiceFactory;
 import com.asportsclub.utils.AdapterCallbacks;
+import com.asportsclub.utils.AppSharedPreferences;
+import com.asportsclub.utils.DialogUtils;
 import com.asportsclub.utils.ToastUtils;
 
 import java.text.DecimalFormat;
@@ -41,12 +50,15 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     private RelativeLayout layoutTotal;
     private LinearLayout layoutNoData;
     private Button btn_proceed;
-
+    private Context context;
+    private ImageView imageViewLogout,imageViewSetting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getSupportActionBar().hide();
         setContentView(R.layout.activity_item);
-
+        context=this;
         tableId = getIntent().getIntExtra("tableId",0);
         selctedVenderId = getIntent().getIntExtra("selctedVenderId",0);
         membershipDetails = (MembershipDetails) getIntent().getSerializableExtra("memberDetail");
@@ -59,6 +71,8 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         layoutNoData = (LinearLayout) findViewById(R.id.layoutNoData);
         txtTotalValue = (TextView) findViewById(R.id.txtTotalValue);
         btn_proceed = (Button)findViewById(R.id.btn_proceed);
+        imageViewSetting=(ImageView)findViewById(R.id.imageviewSetting);
+        imageViewLogout=(ImageView)findViewById(R.id.imageviewLogout);
         btn_proceed.setOnClickListener(this);
 
         recyclerItemView.setLayoutManager(new LinearLayoutManager(ItemActivity.this));
@@ -75,6 +89,42 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         mSelectedItemAdapter.addHeader(new ItemHeaderModel("Name","PRICE","QTY","GST","FINAL PRICE"));
         handleItemAndTotal();
         hitGetItemList();
+        RefrenceWrapper.getRefrenceWrapper(context).getFontTypeFace().setRobotoBoldTypeFace(context,txtTotalValue);
+        imageViewSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogUtils.showBasicwithTwoButton(context, "Edit URL","Are you sure want to change app configuration URL.", "Yes", "Cancel",new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        AppSharedPreferences.getInstance().setUrl("");
+                        AppSharedPreferences.getInstance().setuserName("");
+                        RestServiceFactory.apiService=null;
+                        AppSharedPreferences.getInstance().setTableInfo(null);
+                        Intent i = new Intent(context, GlobalConfigurationActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+
+            }
+        });
+        imageViewLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogUtils.showBasicwithTwoButton(context, "Log Out","Are you sure want to logout ??", "Yes", "No",new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        AppSharedPreferences.getInstance().setuserName("");
+                        AppSharedPreferences.getInstance().setTableInfo(null);
+                        Intent i = new Intent(context, LoginActivity.class);
+                        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+            }
+        });
     }
 
     private void hitGetItemList() {

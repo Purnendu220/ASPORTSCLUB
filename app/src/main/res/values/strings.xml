@@ -8,4 +8,5 @@
     <string name="membership_validation">Membership Validation</string>
     <string name="validate">VALIDATE</string>
     <string name="close">close</string>
+    <string name="something_went_wrong">Something went Wrong.</string>
 </resources>

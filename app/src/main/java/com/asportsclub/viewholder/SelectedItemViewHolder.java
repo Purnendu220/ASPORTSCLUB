@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.asportsclub.R;
+import com.asportsclub.RefrenceWrapper;
 import com.asportsclub.rest.Response.Item;
 import com.asportsclub.utils.AdapterCallbacks;
 
@@ -32,6 +33,7 @@ public class SelectedItemViewHolder extends RecyclerView.ViewHolder {
         textItemQuantity = (TextView)itemView.findViewById(R.id.txtItemQuantity);
         txtItemGst = (TextView)itemView.findViewById(R.id.txtItemGst);
         txtItemFinalPrice = (TextView)itemView.findViewById(R.id.txtItemFinalPrice);
+        RefrenceWrapper.getRefrenceWrapper(context).getFontTypeFace().setRobotoMediumTypeFace(context,textItemName,textItemQuantity,textItemRate,txtItemFinalPrice,txtItemGst);
 
     }
 

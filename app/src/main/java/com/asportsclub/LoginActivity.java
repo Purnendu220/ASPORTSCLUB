@@ -54,14 +54,14 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     EditText edt_email, edt_password;
-    Button btn_sign_in;
+    TextView btn_sign_in;
     TextView txt_error;
     Spinner spinner;
     ArrayList<GlobalVenderDetail> mListVendorDetails = new ArrayList<>();
     String mSelectedVendor;
     GlobalConfigAdapter adapter;
     private int mSelectVenderId;
-    private ProgressBar progressBar;
+    private ProgressBar progressBar,progressBarLoginbutton;
     private Context context;
     ImageView imageViewSetting;
 
@@ -77,9 +77,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         edt_email = (EditText) findViewById(R.id.edt_email);
         edt_password = (EditText) findViewById(R.id.edt_password);
         txt_error = (TextView) findViewById(R.id.txt_error);
-        btn_sign_in = (Button) findViewById(R.id.btn_sign_in);
+        btn_sign_in = (TextView) findViewById(R.id.btn_sign_in);
         spinner = (Spinner) findViewById(R.id.spinner);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBarLoginbutton = (ProgressBar) findViewById(R.id.progressBarLoginbutton);
 
         imageViewSetting = (ImageView) findViewById(R.id.imageviewSetting);
         RefrenceWrapper.getRefrenceWrapper(this).getFontTypeFace().setRobotoMediumTypeFace(this, findViewById(R.id.text_signin));
@@ -217,7 +218,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             showTextView(txt_error, AppMessages.CommonSignInSignUpMessages.SELECT_VENDOR_NAME);
             return;
         }
-
+            progressBarLoginbutton.setVisibility(View.VISIBLE);
         hitApiToAuthenticateUser(email, password, mSelectVenderId);
 
 
@@ -232,10 +233,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onFailure(Call<AuthenticateUserResponse> call, String message) {
                 ToastUtils.show(context, message);
+                progressBarLoginbutton.setVisibility(View.GONE);
             }
 
             @Override
             public void onResponse(Call<AuthenticateUserResponse> call, Response<AuthenticateUserResponse> restResponse, AuthenticateUserResponse response) {
+                progressBarLoginbutton.setVisibility(View.GONE);
                 if (response.getStatusCode().getErrorCode() == 0) {
                     if (response.getVenderTableDetails().size() > 0) {
                         AppSharedPreferences.getInstance().setuserName(response.getUserDetail().getUserName());

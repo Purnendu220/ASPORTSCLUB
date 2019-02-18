@@ -1,11 +1,12 @@
 
 package com.asportsclub.rest.Response;
 
+import java.io.Serializable;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class BillDetails_ {
+public class BillDetails implements Serializable {
 
     @SerializedName("BillNumber")
     @Expose

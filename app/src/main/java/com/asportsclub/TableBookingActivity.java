@@ -110,7 +110,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                 });
             }
         });
-        recycler_table_view.setLayoutManager(new GridAutofitLayoutManager(TableBookingActivity.this, 180));
+        recycler_table_view.setLayoutManager(new GridAutofitLayoutManager(TableBookingActivity.this, 120));
         recycler_table_view.setHasFixedSize(false);
         // recyclerViewClass.scrollToPosition(0);
 

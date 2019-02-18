@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.asportsclub.R;
+import com.asportsclub.RefrenceWrapper;
 import com.asportsclub.adapter.SubMenuAdapter;
 import com.asportsclub.rest.Response.MenuItem;
 import com.asportsclub.utils.AdapterCallbacks;
@@ -31,6 +32,7 @@ public class MenuItemViewHolder extends RecyclerView.ViewHolder {
         imageLeft=(ImageView)itemView.findViewById(R.id.imageLeft);
         imageRight=(ImageView)itemView.findViewById(R.id.imageRight);
         subMenuItems=(RecyclerView)itemView.findViewById(R.id.subMenuItems);
+        RefrenceWrapper.getRefrenceWrapper(context).getFontTypeFace().setRobotoBoldTypeFace(context,textView);
 
     }
 
