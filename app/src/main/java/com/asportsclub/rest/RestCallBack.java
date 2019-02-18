@@ -47,7 +47,7 @@ public abstract class RestCallBack<T> implements Callback<T> {
             else
                 onFailure(call, "");
         } else
-            onFailure(call, AppContext.getInstance().getContext().getString(R.string.no_internet));
+            onFailure(call, AppContext.getInstance().getContext().getString(R.string.something_went_wrong));
 
         try {
             ToastUtils.showErrorOnLive(AppContext.getInstance().getContext(), t.toString());

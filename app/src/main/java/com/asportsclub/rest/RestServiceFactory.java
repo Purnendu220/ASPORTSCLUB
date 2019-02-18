@@ -58,11 +58,11 @@ public class RestServiceFactory {
     private static <S> S createService(Class<S> serviceClass) {
         if (apiService == null) {
 
-           // if (MyuApplication.RETROFIT_SHOW_LOG) {
-                HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
-                logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-                httpClient.addInterceptor(logging);
-           // }
+            // if (MyuApplication.RETROFIT_SHOW_LOG) {
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            httpClient.addInterceptor(logging);
+            // }
 
             httpClient.hostnameVerifier(new HostnameVerifier() {
                 @Override
@@ -72,17 +72,16 @@ public class RestServiceFactory {
                 }
             });
 
-            httpClient.readTimeout(2,TimeUnit.MINUTES);
+            httpClient.readTimeout(2, TimeUnit.MINUTES);
             httpClient.connectTimeout(2, TimeUnit.MINUTES);
             httpClient.writeTimeout(2, TimeUnit.MINUTES);
-
 
 
             String baseUrl = "";
 
 
-                    baseUrl = AppSharedPreferences.getInstance(AppContext.getInstance().getContext()).getURL();
-
+            //baseUrl = AppSharedPreferences.getInstance(AppContext.getInstance().getContext()).getURL();
+            baseUrl = ServiceConstants.BASE_SERVICE_URL;
 
 
             Retrofit.Builder builder =

@@ -76,7 +76,7 @@
 
             <ImageView
                 android:id="@+id/minusButton"
-                android:layout_width="20dp"
+                android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin_2"
@@ -101,6 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:gravity="center"
                 android:textColor="@color/colorPrimary"
                 android:textSize="@dimen/text_14"
                 android:layout_margin="@dimen/margin_5"
@@ -119,7 +120,7 @@
 
             <ImageView
                 android:id="@+id/plusButton"
-                android:layout_width="20dp"
+                android:layout_width="30dp"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/margin_2"
