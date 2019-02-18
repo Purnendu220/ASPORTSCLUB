@@ -33,7 +33,7 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
     TextView txt_error;
     TextView btn_validate;
     ProgressBar progressBar;
-    private int tableId;
+    private int tableId,selctedVenderId;
     private Context context;
 
     @Override
@@ -51,6 +51,7 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
         RefrenceWrapper.getRefrenceWrapper(this).getFontTypeFace().setRobotoMediumTypeFace(this,findViewById(R.id.text_signin));
         RefrenceWrapper.getRefrenceWrapper(this).getFontTypeFace().setRobotoRegularTypeFace(this,edt_member_id,btn_validate);
         tableId = getIntent().getIntExtra("tableId", 0);
+        selctedVenderId = getIntent().getIntExtra("selctedVenderId",0);
 
     }
 
@@ -72,10 +73,7 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
         }
         progressBar.setVisibility(View.VISIBLE);
             hitApiToValidateMemberShip();
-//        Intent i = new Intent(this, LoginActivity.class);
-//        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//        startActivity(i);
-//        finish();
+
 
     }
 
@@ -96,6 +94,13 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
                 if(response.getStatusCode().getErrorCode()==0){
                     progressBar.setVisibility(View.GONE);
                     ToastUtils.show(context,response.getMembershipDetails().getMemberName());
+                    Intent i = new Intent(context, ItemActivity.class);
+                    i.putExtra("memberDetail", response.getMembershipDetails());
+                    i.putExtra("tableId",tableId);
+                    i.putExtra("selctedVenderId",selctedVenderId);
+
+
+                    startActivity(i);
                     finish();
                 }
                 else{

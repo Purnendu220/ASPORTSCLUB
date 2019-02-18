@@ -10,10 +10,18 @@
     <color name="green">#02B597</color>
     <color name="white">#ffffff</color>
     <color name="yellow">#F5E300</color>
+    <color name="separator">#f1f0ee</color>
+    <color name="theme_bg">#f1f0ee</color>
+    <color name="theme_medium_dark_text">#AA031d22</color>
+
+
+
 
     <color name="text_color_field">#7F7F7F</color>
     <color name="heading_card">#A5A4A5</color>
     <color name="signup_intro">#545454</color>
+    <color name="theme_dark_text">#031d22</color>
+
 
     <color name="transparent">#00000000</color>
 

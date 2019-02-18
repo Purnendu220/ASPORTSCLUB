@@ -13,24 +13,12 @@ public class ServiceConstants {
     public static final String TABLEDATAFROMVENDERID="/api/GetVenderTableInfo";
     public static final String MEMBERSHIPVALIDATION="/api/ValidateMembershipId";
 
-    public static final String SERVICE_SUCCESS_CODE = "2XX";
-    public static final String SERVICE_FAILURE_CODE = "4XX";
-    public static final String SERVICE_ERROR_CODE = "5XX";
+    public static final String ITEM_LIST = "/api/GetMenuDetails";
+    public static final String VENDER_ID = "VenderId";
 
-    public static final String USER_ID = "userId";
-    public static final String ISARCHIEVE = "isArchived";
-    public static final String MIDL_TYPE = "type";
-    public static final String MIDL_QUERY = "query";
-    public static final String MIDL_START = "onStart";
-    public static final String MIDL_ROW = "rows";
-    public static final String MIDL_UNIVERSITY = "university";
-    public static final String MIDL_DEPARTMENT = "department";
-    public static final String TYPE = "type";
-    public static final String USER_NAME_STRING = "username";
-    public static final String USER_EMAIL_STRING = "email";
-    public static final String VALUE_STRING = "value";
 
-    public static final String BOARD_ID = "id";
+
+
 
 
 

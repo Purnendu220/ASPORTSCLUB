@@ -72,50 +72,11 @@ public class RestServiceFactory {
                 }
             });
 
-            httpClient.readTimeout(2, TimeUnit.MINUTES);
+            httpClient.readTimeout(2,TimeUnit.MINUTES);
             httpClient.connectTimeout(2, TimeUnit.MINUTES);
-            httpClient.writeTimeout(10, TimeUnit.MINUTES);
+            httpClient.writeTimeout(2, TimeUnit.MINUTES);
 
-            httpClient.addInterceptor(new Interceptor() {
-                @Override
-                public Response intercept(Chain chain) throws IOException {
-                    String auth;
-                    String lang = Locale.getDefault().getDisplayLanguage();
-                    if (!lang.equalsIgnoreCase("English")) {
-                        lang = "ar";
-                    } else {
-                        lang = "en";
-                    }
 
-//                    if (TempStorage.getAuthToken() == null || TempStorage.getAuthToken().equalsIgnoreCase("")) {
-//                        auth = "no-token";
-//                    } else {
-//                        auth = TempStorage.getAuthToken();
-//
-//                        LogUtils.debug("okhttp " + AppConstants.ApiParamKey.MYU_AUTH_TOKEN + " : " + auth);
-//                    }
-                    Request request = chain.request().newBuilder().build();
-
-                   // if (MyuApplication.API_DEBUG) {
-                        HttpUrl url = chain.request().url().newBuilder().addQueryParameter(AppConstants.ApiParamKey.DEBUG, true + "").build();
-                        request = request.newBuilder().url(url).build();
-                    //}
-                    if(chain.request().url().toString().contains(AppConstants.Url.CHAT_HISTORY)){
-                        request = request.newBuilder().tag("ChatHistory").build();
-                    }
-                    if (request.url().toString().contains("myu.co")) {
-                        try {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                                httpClient.sslSocketFactory(getSSLConfig(AppContext.getInstance().getContext()).getSocketFactory(), x509TrustManager);
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    return chain.proceed(request);
-                }
-            });
 
             String baseUrl = "";
 
