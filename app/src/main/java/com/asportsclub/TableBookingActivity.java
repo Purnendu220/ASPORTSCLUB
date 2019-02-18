@@ -23,6 +23,7 @@ import com.asportsclub.adapter.TableBookingAdapter;
 import com.asportsclub.rest.Response.AuthenticateUserResponse;
 import com.asportsclub.rest.Response.GlobalVenderDetail;
 import com.asportsclub.rest.Response.GlobalVenderDetails;
+import com.asportsclub.rest.Response.ItemBillDetail;
 import com.asportsclub.rest.Response.UserValidVenderDetail;
 import com.asportsclub.rest.Response.VenderTableDetail;
 import com.asportsclub.rest.Response.VenderTableDetails;
@@ -247,6 +248,8 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
             case R.id.textViewTable:
                 if (model.getTableStatus() == 1) {
                     Snackbar.make(view, "This table is occupied", Snackbar.LENGTH_LONG).show();
+                    progressBar.setVisibility(View.VISIBLE);
+                    hitApiTogetBilldetail(model.getBillNumber(),model.getLocationCode());
 
                 } else {
                     haldleTableBooking(model);
@@ -254,6 +257,31 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                 }
                 break;
         }
+    }
+
+    private void hitApiTogetBilldetail(int billNumber, int locationCode) {
+        Call<ItemBillDetail> commentsCall = RestServiceFactory.createService().getBillDetail(billNumber,locationCode
+        );
+        commentsCall.enqueue(new RestCallBack<ItemBillDetail>() {
+            @Override
+            public void onFailure(Call<ItemBillDetail> call, String message) {
+                progressBar.setVisibility(View.GONE);
+                ToastUtils.show(context,message);
+            }
+
+            @Override
+            public void onResponse(Call<ItemBillDetail> call, Response<ItemBillDetail> restResponse, ItemBillDetail response) {
+                progressBar.setVisibility(View.GONE);
+                if(response.getStatusCode().getErrorCode()==0){
+                    Intent i = new Intent(context, ItemActivity.class);
+                    i.putExtra("billDetails", response);
+                    i.putExtra("selctedVenderId",selctedVenderId);
+
+                    startActivity(i);
+                }
+            }
+        });
+
     }
 
     @Override

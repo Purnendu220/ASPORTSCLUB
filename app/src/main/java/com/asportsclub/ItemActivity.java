@@ -21,6 +21,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.asportsclub.adapter.MenuItemAdapter;
 import com.asportsclub.adapter.SelectedItemAdapter;
 import com.asportsclub.rest.Response.Item;
+import com.asportsclub.rest.Response.ItemBillDetail;
 import com.asportsclub.rest.Response.ItemHeaderModel;
 import com.asportsclub.rest.Response.MembershipDetails;
 import com.asportsclub.rest.Response.MenuItems;
@@ -46,6 +47,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     List<Item> mSelectedItemList = new ArrayList<>();
     int tableId,selctedVenderId;
     MembershipDetails membershipDetails;
+    ItemBillDetail itemBillDetail;
     TextView txtTotalValue;
     private RelativeLayout layoutTotal;
     private LinearLayout layoutNoData;
@@ -87,6 +89,21 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         itemSelectedView.setAdapter(mSelectedItemAdapter);
         itemSelectedView.setItemAnimator(new DefaultItemAnimator());
         mSelectedItemAdapter.addHeader(new ItemHeaderModel("Name","PRICE","QTY","GST","FINAL PRICE"));
+        if(getIntent().hasExtra("billDetails")) {
+            itemBillDetail = (ItemBillDetail) getIntent().getSerializableExtra("billDetails");
+
+            for(int i=0;i<itemBillDetail.getBillDetails().getItemDetails().size();i++){
+                Item item=new Item();
+                item.setItemName(itemBillDetail.getBillDetails().getItemDetails().get(i).getItemName());
+                item.setItemCode(itemBillDetail.getBillDetails().getItemDetails().get(i).getItemCode());
+                item.setItemQuantity(itemBillDetail.getBillDetails().getItemDetails().get(i).getQuantity());
+                item.setItemRate(itemBillDetail.getBillDetails().getItemDetails().get(i).getItemRate());
+                item.setTaxPercentage(itemBillDetail.getBillDetails().getItemDetails().get(i).getVatAmount());
+                mSelectedItemList.add(item);
+            }
+            mSelectedItemAdapter.addAllItem(mSelectedItemList);
+            mSelectedItemAdapter.notifyDataSetChanged();
+        }
         handleItemAndTotal();
         hitGetItemList();
         RefrenceWrapper.getRefrenceWrapper(context).getFontTypeFace().setRobotoBoldTypeFace(context,txtTotalValue);

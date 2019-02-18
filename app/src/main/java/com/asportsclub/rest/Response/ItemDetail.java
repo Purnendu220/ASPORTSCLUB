@@ -19,13 +19,13 @@ public class ItemDetail implements Serializable {
     private int unitCode;
     @SerializedName("ItemRate")
     @Expose
-    private int itemRate;
+    private double itemRate;
     @SerializedName("Quantity")
     @Expose
     private int quantity;
     @SerializedName("ItemAmount")
     @Expose
-    private int itemAmount;
+    private double itemAmount;
     @SerializedName("VatRate")
     @Expose
     private int vatRate;
@@ -60,11 +60,11 @@ public class ItemDetail implements Serializable {
         this.unitCode = unitCode;
     }
 
-    public int getItemRate() {
+    public double getItemRate() {
         return itemRate;
     }
 
-    public void setItemRate(int itemRate) {
+    public void setItemRate(double itemRate) {
         this.itemRate = itemRate;
     }
 
@@ -76,11 +76,11 @@ public class ItemDetail implements Serializable {
         this.quantity = quantity;
     }
 
-    public int getItemAmount() {
+    public double getItemAmount() {
         return itemAmount;
     }
 
-    public void setItemAmount(int itemAmount) {
+    public void setItemAmount(double itemAmount) {
         this.itemAmount = itemAmount;
     }
 
