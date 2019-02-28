@@ -13,6 +13,7 @@ import com.asportsclub.TableBookingModel;
 import com.asportsclub.rest.Response.Item;
 import com.asportsclub.rest.Response.MenuItem;
 import com.asportsclub.utils.AdapterCallbacks;
+import com.asportsclub.utils.AdapterUpdateListener;
 import com.asportsclub.viewholder.EmptyViewHolder;
 import com.asportsclub.viewholder.LoaderViewHolder;
 import com.asportsclub.viewholder.MenuItemViewHolder;
@@ -21,7 +22,7 @@ import com.asportsclub.viewholder.TableBookingViewHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MenuItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements AdapterUpdateListener {
     private static final int VIEW_TYPE_UNKNOWN = -1;
     private static final int VIEW_TYPE_ITEM = 1;
     private static final int VIEW_TYPE_LOADER = 2;
@@ -114,7 +115,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MenuItemViewHolder) {
-            ((MenuItemViewHolder) holder).bind((MenuItem) getItem(position), adapterCallbacks, position);
+            ((MenuItemViewHolder) holder).bind((MenuItem) getItem(position), adapterCallbacks, position,this);
         } else if (holder instanceof LoaderViewHolder) {
             ((LoaderViewHolder) holder).bind(listLoader, adapterCallbacks);
             if (position == getItemCount() - 1 && !listLoader.isFinish()) {
@@ -135,6 +136,15 @@ public class MenuItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             return list.get(position);
         else
             return null;
+    }
+
+    @Override
+    public void onAdapterUpdate(Object obj, int position) {
+        MenuItem item = (MenuItem)obj;
+        MenuItem adapterItem = (MenuItem) getItem(position);
+        adapterItem.setExpanded(item.isExpanded());
+        notifyItemChanged(position);
+
     }
 }
 

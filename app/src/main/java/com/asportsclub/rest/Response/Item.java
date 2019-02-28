@@ -24,6 +24,14 @@ private String taxDescription;
 @SerializedName("TaxPercentage")
 @Expose
 private Double taxPercentage;
+@SerializedName("ServiceCharge")
+@Expose
+private Double ServiceCharge;
+@SerializedName("UnitCode")
+@Expose
+private Integer UnitCode;
+
+
 
 private int itemQuantity;
 
@@ -73,6 +81,22 @@ this.taxPercentage = taxPercentage;
 
     public void setItemQuantity(int itemQuantity) {
         this.itemQuantity = itemQuantity;
+    }
+
+    public Double getServiceCharge() {
+        return ServiceCharge;
+    }
+
+    public void setServiceCharge(Double serviceCharge) {
+        ServiceCharge = serviceCharge;
+    }
+
+    public Integer getUnitCode() {
+        return UnitCode;
+    }
+
+    public void setUnitCode(Integer unitCode) {
+        UnitCode = unitCode;
     }
 }
 

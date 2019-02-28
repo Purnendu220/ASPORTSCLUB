@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -20,11 +21,16 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.asportsclub.adapter.MenuItemAdapter;
 import com.asportsclub.adapter.SelectedItemAdapter;
+import com.asportsclub.rest.RequestModel.BillItem;
+import com.asportsclub.rest.RequestModel.BillSaveApi;
+import com.asportsclub.rest.Response.AuthenticateUserResponse;
 import com.asportsclub.rest.Response.Item;
 import com.asportsclub.rest.Response.ItemBillDetail;
 import com.asportsclub.rest.Response.ItemHeaderModel;
 import com.asportsclub.rest.Response.MembershipDetails;
 import com.asportsclub.rest.Response.MenuItems;
+import com.asportsclub.rest.Response.SaveBillResponse;
+import com.asportsclub.rest.Response.VenderTableDetail;
 import com.asportsclub.rest.RestCallBack;
 import com.asportsclub.rest.RestServiceFactory;
 import com.asportsclub.utils.AdapterCallbacks;
@@ -45,15 +51,19 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     SelectedItemAdapter mSelectedItemAdapter;
     RecyclerView recyclerItemView,itemSelectedView;
     List<Item> mSelectedItemList = new ArrayList<>();
+
     int tableId,selctedVenderId;
     MembershipDetails membershipDetails;
     ItemBillDetail itemBillDetail;
     TextView txtTotalValue;
+    EditText edtPax;
     private RelativeLayout layoutTotal;
     private LinearLayout layoutNoData;
     private Button btn_proceed;
     private Context context;
     private ImageView imageViewLogout,imageViewSetting;
+    private VenderTableDetail mTableDetail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +74,8 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         tableId = getIntent().getIntExtra("tableId",0);
         selctedVenderId = getIntent().getIntExtra("selctedVenderId",0);
         membershipDetails = (MembershipDetails) getIntent().getSerializableExtra("memberDetail");
+        mTableDetail = (VenderTableDetail) getIntent().getSerializableExtra("tableDetail");
+
 
 
         recyclerItemView = (RecyclerView)findViewById(R.id.itemView);
@@ -72,6 +84,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         layoutTotal = (RelativeLayout)findViewById(R.id.layoutTotal);
         layoutNoData = (LinearLayout) findViewById(R.id.layoutNoData);
         txtTotalValue = (TextView) findViewById(R.id.txtTotalValue);
+        edtPax = (EditText)findViewById(R.id.edt_pax);
         btn_proceed = (Button)findViewById(R.id.btn_proceed);
         imageViewSetting=(ImageView)findViewById(R.id.imageviewSetting);
         imageViewLogout=(ImageView)findViewById(R.id.imageviewLogout);
@@ -196,6 +209,14 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                 handleItemAndTotal();
                 break;
             case R.id.plusButton:
+                double itemsPrice = handleItemAndTotalBeforeAdd(model);
+                if(membershipDetails.getMemberType()=="D"||membershipDetails.getMemberType()=="X"){
+                    if(itemsPrice > membershipDetails.getOpeningBalance()){
+                        ToastUtils.show(context,"You can't add this item your balace is low.");
+                        return;
+                    }
+                }
+
                 for(int i=0;i<mSelectedItemList.size();i++){
                     if(model.getItemCode() == mSelectedItemList.get(i).getItemCode()){
                         itemPosition = i+1;
@@ -242,7 +263,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             for (Object item:mSelectedItemAdapter.getList()) {
                 if(item instanceof Item){
                     Item model = (Item) item;
-                    double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getTaxPercentage())/100) + (model.getItemRate() * model.getItemQuantity());
+                    double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getServiceCharge())/100)+(((model.getItemRate() * model.getItemQuantity())*model.getTaxPercentage())/100) + (model.getItemRate() * model.getItemQuantity());
                     //+"";
 
                     totalValue += finalprice;
@@ -255,16 +276,102 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             itemSelectedView.setVisibility(View.GONE);
             layoutTotal.setVisibility(View.GONE);
             layoutNoData.setVisibility(View.VISIBLE);
-
         }
 
     }
+    public double handleItemAndTotalBeforeAdd(Item itemToAdd){
+        if(mSelectedItemAdapter.getItemCount()>1){
+            double totalValue=0;
+            for (Object item:mSelectedItemAdapter.getList()) {
+                if(item instanceof Item){
+                    Item model = (Item) item;
+                    double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getServiceCharge())/100)+(((model.getItemRate() * model.getItemQuantity())*model.getTaxPercentage())/100) + (model.getItemRate() * model.getItemQuantity());
 
+                    totalValue += finalprice;
+                }
+            }
+            double finalprice = (((itemToAdd.getItemRate() * itemToAdd.getItemQuantity())*itemToAdd.getServiceCharge())/100)+(((itemToAdd.getItemRate() * itemToAdd.getItemQuantity())*itemToAdd.getTaxPercentage())/100) + (itemToAdd.getItemRate() * itemToAdd.getItemQuantity());
+
+            totalValue += finalprice;
+            return totalValue;
+        }
+     return 0;
+    }
+    public double getItemTotal(){
+        if(mSelectedItemAdapter.getItemCount()>1){
+            double totalValue=0;
+            for (Object item:mSelectedItemAdapter.getList()) {
+                if(item instanceof Item){
+                    Item model = (Item) item;
+                    double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getServiceCharge())/100)+(((model.getItemRate() * model.getItemQuantity())*model.getTaxPercentage())/100) + (model.getItemRate() * model.getItemQuantity());
+
+                    totalValue += finalprice;
+                }
+            }
+            return totalValue;
+        }
+        return 0.0;
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_proceed:
+                if (mSelectedItemAdapter.getItemCount() > 1) {
+                    if(edtPax.getText().toString()!=null&&edtPax.getText().toString().length()>0) {
+                        AuthenticateUserResponse userRespose = AppSharedPreferences.getInstance().getTableInfo();
+                        List<BillItem> billItems = new ArrayList<>();
+                        for (Object item : mSelectedItemAdapter.getList()) {
+                            if (item instanceof Item) {
+                                Item model = (Item) item;
+                                double finalprice = (((model.getItemRate() * model.getItemQuantity()) * model.getServiceCharge()) / 100) + (((model.getItemRate() * model.getItemQuantity()) * model.getTaxPercentage()) / 100) + (model.getItemRate() * model.getItemQuantity());
+
+                                billItems.add(new BillItem(model.getItemCode(), model.getUnitCode(), model.getItemQuantity(), model.getItemRate(), finalprice, (((model.getItemRate() * model.getItemQuantity()) * model.getTaxPercentage()) / 100), model.getServiceCharge(), model.getItemName(), Integer.parseInt(userRespose.getUserDetail().getUserId()), selctedVenderId));
+
+                            }
+                        }
+
+                        double itemTotal = getItemTotal();
+                        double itemTotalDecimal = getItemTotal() % 1;
+                        BillSaveApi requestBillSave = new BillSaveApi(0, selctedVenderId, Integer.parseInt(userRespose.getUserDetail().getUserId()), membershipDetails.getMembershipId(), membershipDetails.getMemberType(), membershipDetails.getOpeningBalance(), mTableDetail.getTableName(), Integer.parseInt(edtPax.getText().toString()), membershipDetails.getCouponNumber(), itemTotal, itemTotalDecimal, billItems);
+                        hitBillSaveApi(requestBillSave);
+                    }else{
+                        ToastUtils.show(context,"Please insert PAX value");
+                    }
+        }
+        else {
+                    ToastUtils.show(context,"Please add items before proceeding order");
+
+                }
+
                 break;
         }
+    }
+    private void hitBillSaveApi(BillSaveApi requestBillSave) {
+
+
+        Call<SaveBillResponse> commentsCall = RestServiceFactory.createService().saveBill(requestBillSave);
+        commentsCall.enqueue(new RestCallBack<SaveBillResponse>() {
+            @Override
+            public void onFailure(Call<SaveBillResponse> call, String message) {
+                ToastUtils.show(ItemActivity.this,message);
+            }
+
+            @Override
+            public void onResponse(Call<SaveBillResponse> call, Response<SaveBillResponse> restResponse, SaveBillResponse response) {
+                if(response.getStatusCode()!=null&&response.getStatusCode().getErrorCode()==0){
+                    ToastUtils.show(context,"Your order placed successfully.Your order bill number is "+response.getBillNumber()+" .");
+                }
+                else if(response.getStatusCode()!=null&&response.getStatusCode().getErrorCode()!=0){
+                    ToastUtils.show(context,response.getStatusCode().getErrorMessage());
+
+                }
+                else {
+                    ToastUtils.show(context,"Some error occured while proceeding order.");
+
+                }
+
+
+            }
+        });
     }
 }

@@ -17,6 +17,8 @@ private String menuName;
 @Expose
 private List<SubMenuItem> subMenuItems = null;
 
+private boolean isExpanded = true;
+
 public Integer getMenuCode() {
 return menuCode;
 }
@@ -41,4 +43,11 @@ public void setSubMenuItems(List<SubMenuItem> subMenuItems) {
 this.subMenuItems = subMenuItems;
 }
 
+    public boolean isExpanded() {
+        return isExpanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        isExpanded = expanded;
+    }
 }

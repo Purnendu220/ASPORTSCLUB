@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.asportsclub.rest.Response.MembershipDetail;
+import com.asportsclub.rest.Response.VenderTableDetail;
 import com.asportsclub.rest.Response.VenderTableDetails;
 import com.asportsclub.rest.RestCallBack;
 import com.asportsclub.rest.RestServiceFactory;
@@ -35,6 +36,7 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
     ProgressBar progressBar;
     private int tableId,selctedVenderId;
     private Context context;
+    private VenderTableDetail mTableDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,8 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
         RefrenceWrapper.getRefrenceWrapper(this).getFontTypeFace().setRobotoRegularTypeFace(this,edt_member_id,btn_validate);
         tableId = getIntent().getIntExtra("tableId", 0);
         selctedVenderId = getIntent().getIntExtra("selctedVenderId",0);
+        mTableDetail = (VenderTableDetail) getIntent().getSerializableExtra("tableDetail");
+
 
     }
 
@@ -98,6 +102,7 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
                     i.putExtra("memberDetail", response.getMembershipDetails());
                     i.putExtra("tableId",tableId);
                     i.putExtra("selctedVenderId",selctedVenderId);
+                    i.putExtra("tableDetail",mTableDetail);
 
 
                     startActivity(i);

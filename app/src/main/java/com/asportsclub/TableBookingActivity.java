@@ -249,7 +249,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                 if (model.getTableStatus() == 1) {
                     Snackbar.make(view, "This table is occupied", Snackbar.LENGTH_LONG).show();
                     progressBar.setVisibility(View.VISIBLE);
-                    hitApiTogetBilldetail(model.getBillNumber(),model.getLocationCode());
+                    hitApiTogetBilldetail(model.getBillNumber(),model.getLocationCode(),model);
 
                 } else {
                     haldleTableBooking(model);
@@ -259,7 +259,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
         }
     }
 
-    private void hitApiTogetBilldetail(int billNumber, int locationCode) {
+    private void hitApiTogetBilldetail(int billNumber, int locationCode, final VenderTableDetail model) {
         Call<ItemBillDetail> commentsCall = RestServiceFactory.createService().getBillDetail(billNumber,locationCode
         );
         commentsCall.enqueue(new RestCallBack<ItemBillDetail>() {
@@ -274,6 +274,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                 progressBar.setVisibility(View.GONE);
                 if(response.getStatusCode().getErrorCode()==0){
                     Intent i = new Intent(context, ItemActivity.class);
+                    i.putExtra("tableDetail",model);
                     i.putExtra("billDetails", response);
                     i.putExtra("selctedVenderId",selctedVenderId);
 
@@ -320,6 +321,8 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                 Intent intent = new Intent(context, MemberValidationActivity.class);
                 intent.putExtra("tableId", selectedSeat);
                 intent.putExtra("selctedVenderId",selctedVenderId);
+                intent.putExtra("tableDetail",data);
+
                 startActivity(intent);
             }
         } catch (Exception e) {

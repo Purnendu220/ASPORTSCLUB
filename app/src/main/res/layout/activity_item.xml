@@ -66,11 +66,24 @@
             android:layout_marginLeft="@dimen/margin_20"
             android:weightSum="10"
             >
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight=".5">
+
+                <EditText
+                    android:id="@+id/edt_pax"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="PAX"
+                    android:imeOptions="actionDone"
+                    android:inputType="number" />
+            </android.support.design.widget.TextInputLayout>
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginBottom="@dimen/margin_10"
-                android:layout_weight="8"
+                android:layout_weight="7.5"
                 >
 
 
