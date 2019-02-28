@@ -15,6 +15,17 @@ public class MembershipDetails implements Serializable {
     @Expose
     private String memberName;
 
+    @SerializedName("MemberType")
+    @Expose
+    private String MemberType;
+    @SerializedName("CouponNumber")
+    @Expose
+    private Integer CouponNumber;
+    @SerializedName("OpeningBalance")
+    @Expose
+    private Double OpeningBalance;
+
+
     public String getMembershipId() {
         return membershipId;
     }
@@ -31,4 +42,27 @@ public class MembershipDetails implements Serializable {
         this.memberName = memberName;
     }
 
+    public String getMemberType() {
+        return MemberType;
+    }
+
+    public void setMemberType(String memberType) {
+        MemberType = memberType;
+    }
+
+    public Integer getCouponNumber() {
+        return CouponNumber;
+    }
+
+    public void setCouponNumber(Integer couponNumber) {
+        CouponNumber = couponNumber;
+    }
+
+    public Double getOpeningBalance() {
+        return OpeningBalance;
+    }
+
+    public void setOpeningBalance(Double openingBalance) {
+        OpeningBalance = openingBalance;
+    }
 }

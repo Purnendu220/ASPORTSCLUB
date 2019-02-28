@@ -15,6 +15,7 @@ public class ServiceConstants {
     public static final String BILLDETAILS = "/api/GetBillDetails";
 
     public static final String ITEM_LIST = "/api/GetMenuDetails";
+    public static final String SAVE_BILL = "/api/SaveBill";
     public static final String VENDER_ID = "VenderId";
 
 

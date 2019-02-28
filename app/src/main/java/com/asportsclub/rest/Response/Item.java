@@ -23,9 +23,19 @@ private Double itemRate;
 private String taxDescription;
 @SerializedName("TaxPercentage")
 @Expose
-private Double taxPercentage;
+private double taxPercentage;
+@SerializedName("ServiceCharge")
+@Expose
+private Double ServiceCharge;
+@SerializedName("UnitCode")
+@Expose
+private Integer UnitCode;
+
+
 
 private int itemQuantity;
+private boolean itemOrderStatus;
+private int orderedQuantity;
 
 public Integer getItemCode() {
 return itemCode;
@@ -73,6 +83,38 @@ this.taxPercentage = taxPercentage;
 
     public void setItemQuantity(int itemQuantity) {
         this.itemQuantity = itemQuantity;
+    }
+
+    public double getServiceCharge() {
+        return ServiceCharge;
+    }
+
+    public void setServiceCharge(double serviceCharge) {
+        ServiceCharge = serviceCharge;
+    }
+
+    public Integer getUnitCode() {
+        return UnitCode;
+    }
+
+    public void setUnitCode(Integer unitCode) {
+        UnitCode = unitCode;
+    }
+
+    public boolean isItemOrderStatus() {
+        return itemOrderStatus;
+    }
+
+    public void setItemOrderStatus(boolean itemOrderStatus) {
+        this.itemOrderStatus = itemOrderStatus;
+    }
+
+    public int getOrderedQuantity() {
+        return orderedQuantity;
+    }
+
+    public void setOrderedQuantity(int orderedQuantity) {
+        this.orderedQuantity = orderedQuantity;
     }
 }
 
