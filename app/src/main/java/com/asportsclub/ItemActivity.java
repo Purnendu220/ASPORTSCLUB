@@ -55,7 +55,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     int tableId,selctedVenderId;
     MembershipDetails membershipDetails;
     ItemBillDetail itemBillDetail;
-    TextView txtTotalValue;
+    TextView txtTotalValue,text_signin;
     EditText edtPax;
     private RelativeLayout layoutTotal;
     private LinearLayout layoutNoData;
@@ -63,6 +63,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     private Context context;
     private ImageView imageViewLogout,imageViewSetting;
     private VenderTableDetail mTableDetail;
+    private int billnumber=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +89,9 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         btn_proceed = (Button)findViewById(R.id.btn_proceed);
         imageViewSetting=(ImageView)findViewById(R.id.imageviewSetting);
         imageViewLogout=(ImageView)findViewById(R.id.imageviewLogout);
+        text_signin=(TextView)findViewById(R.id.text_signin);
         btn_proceed.setOnClickListener(this);
+        text_signin.setText(membershipDetails.getMembershipId());
 
         recyclerItemView.setLayoutManager(new LinearLayoutManager(ItemActivity.this));
         recyclerItemView.setHasFixedSize(false);
@@ -181,32 +184,37 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
 
         switch (view.getId()) {
             case R.id.minusButton:
-                for(int i=0;i<mSelectedItemList.size();i++){
-                    if(model.getItemCode() == mSelectedItemList.get(i).getItemCode()){
-                        itemPosition = i+1;
+                if(model.isItemOrderStatus()){
+                    ToastUtils.show(context,"Can't remove items that has been ordered");
+                }else{
+                    for(int i=0;i<mSelectedItemList.size();i++){
+                        if(model.getItemCode() == mSelectedItemList.get(i).getItemCode()){
+                            itemPosition = i+1;
+                        }
                     }
-                }
-                if(model.getItemQuantity()>0){
-                    if(itemPosition > -1){
-                        Item selectedItem = (Item) mSelectedItemAdapter.getItem(itemPosition);
-                        selectedItem.setItemQuantity(model.getItemQuantity());
-                        mSelectedItemAdapter.notifyItemChanged(itemPosition);
+                    if(model.getItemQuantity()>0){
+                        if(itemPosition > -1){
+                            Item selectedItem = (Item) mSelectedItemAdapter.getItem(itemPosition);
+                            selectedItem.setItemQuantity(model.getItemQuantity());
+                            mSelectedItemAdapter.notifyItemChanged(itemPosition);
 
 
 
-                    }else{
-                        mSelectedItemList.add(model);
-                        mSelectedItemAdapter.addItem(model);
-                        mSelectedItemAdapter.notifyDataSetChanged();
+                        }else{
+                            mSelectedItemList.add(model);
+                            mSelectedItemAdapter.addItem(model);
+                            mSelectedItemAdapter.notifyDataSetChanged();
+
+                        }
+                    }
+                    else{
+                        mSelectedItemAdapter.removeItem(itemPosition);
+                        mSelectedItemList.remove(itemPosition-1);
 
                     }
+                    handleItemAndTotal();
                 }
-                else{
-                    mSelectedItemAdapter.removeItem(itemPosition);
-                    mSelectedItemList.remove(itemPosition-1);
 
-                }
-                handleItemAndTotal();
                 break;
             case R.id.plusButton:
                 double itemsPrice = handleItemAndTotalBeforeAdd(model);
@@ -226,10 +234,12 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                     if(itemPosition > -1){
                         Item selectedItem = (Item) mSelectedItemAdapter.getItem(itemPosition);
                         selectedItem.setItemQuantity(model.getItemQuantity());
+                        selectedItem.setItemOrderStatus(false);
                         mSelectedItemAdapter.notifyItemChanged(itemPosition);
 
 
                     }else{
+                        model.setItemOrderStatus(false);
                         mSelectedItemList.add(model);
                         mSelectedItemAdapter.addItem(model);
                         mSelectedItemAdapter.notifyDataSetChanged();
@@ -303,9 +313,10 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             for (Object item:mSelectedItemAdapter.getList()) {
                 if(item instanceof Item){
                     Item model = (Item) item;
-                    double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getServiceCharge())/100)+(((model.getItemRate() * model.getItemQuantity())*model.getTaxPercentage())/100) + (model.getItemRate() * model.getItemQuantity());
+                        double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getServiceCharge())/100)+(((model.getItemRate() * model.getItemQuantity())*model.getTaxPercentage())/100) + (model.getItemRate() * model.getItemQuantity());
 
-                    totalValue += finalprice;
+                        totalValue += finalprice;
+
                 }
             }
             return totalValue;
@@ -323,17 +334,23 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                         for (Object item : mSelectedItemAdapter.getList()) {
                             if (item instanceof Item) {
                                 Item model = (Item) item;
-                                double finalprice = (((model.getItemRate() * model.getItemQuantity()) * model.getServiceCharge()) / 100) + (((model.getItemRate() * model.getItemQuantity()) * model.getTaxPercentage()) / 100) + (model.getItemRate() * model.getItemQuantity());
+                                if(!model.isItemOrderStatus()){
+                                    double finalprice = (((model.getItemRate() * (model.getItemQuantity()-model.getOrderedQuantity())) * model.getServiceCharge()) / 100) + (((model.getItemRate() * (model.getItemQuantity()-model.getOrderedQuantity())) * model.getTaxPercentage()) / 100) + (model.getItemRate() * (model.getItemQuantity()-model.getOrderedQuantity()));
+                                    billItems.add(new BillItem(model.getItemCode(), model.getUnitCode(), (model.getItemQuantity()-model.getOrderedQuantity()), model.getItemRate(), finalprice, (((model.getItemRate() * (model.getItemQuantity()-model.getOrderedQuantity())) * model.getTaxPercentage()) / 100),(((model.getItemRate() * (model.getItemQuantity()-model.getOrderedQuantity())) * model.getServiceCharge()) / 100) , model.getItemName(), Integer.parseInt(userRespose.getUserDetail().getUserId()), selctedVenderId));
 
-                                billItems.add(new BillItem(model.getItemCode(), model.getUnitCode(), model.getItemQuantity(), model.getItemRate(), finalprice, (((model.getItemRate() * model.getItemQuantity()) * model.getTaxPercentage()) / 100), model.getServiceCharge(), model.getItemName(), Integer.parseInt(userRespose.getUserDetail().getUserId()), selctedVenderId));
+                                }
 
                             }
                         }
-
                         double itemTotal = getItemTotal();
                         double itemTotalDecimal = getItemTotal() % 1;
-                        BillSaveApi requestBillSave = new BillSaveApi(0, selctedVenderId, Integer.parseInt(userRespose.getUserDetail().getUserId()), membershipDetails.getMembershipId(), membershipDetails.getMemberType(), membershipDetails.getOpeningBalance(), mTableDetail.getTableName(), Integer.parseInt(edtPax.getText().toString()), membershipDetails.getCouponNumber(), itemTotal, itemTotalDecimal, billItems);
-                        hitBillSaveApi(requestBillSave);
+                        if(itemTotal==0){
+                            ToastUtils.show(context,"You already placed your order.Add some items to update your order.");
+                        }else{
+                            BillSaveApi requestBillSave = new BillSaveApi(billnumber, selctedVenderId, Integer.parseInt(userRespose.getUserDetail().getUserId()), membershipDetails.getMembershipId(), membershipDetails.getMemberType(), membershipDetails.getOpeningBalance(), mTableDetail.getTableName(), Integer.parseInt(edtPax.getText().toString()), membershipDetails.getCouponNumber(), itemTotal, itemTotalDecimal, billItems);
+                            hitBillSaveApi(requestBillSave);
+                        }
+
                     }else{
                         ToastUtils.show(context,"Please insert PAX value");
                     }
@@ -359,7 +376,17 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             @Override
             public void onResponse(Call<SaveBillResponse> call, Response<SaveBillResponse> restResponse, SaveBillResponse response) {
                 if(response.getStatusCode()!=null&&response.getStatusCode().getErrorCode()==0){
+                    billnumber = response.getBillNumber();
                     ToastUtils.show(context,"Your order placed successfully.Your order bill number is "+response.getBillNumber()+" .");
+                    for(int i=0;i<mSelectedItemAdapter.getItemCount();i++){
+                        if(mSelectedItemAdapter.getItem(i) instanceof Item){
+                            Item selectedItem = (Item) mSelectedItemAdapter.getItem(i);
+                            selectedItem.setItemOrderStatus(true);
+                            selectedItem.setOrderedQuantity(selectedItem.getItemQuantity());
+                            mSelectedItemAdapter.notifyItemChanged(i);
+                        }
+                    }
+
                 }
                 else if(response.getStatusCode()!=null&&response.getStatusCode().getErrorCode()!=0){
                     ToastUtils.show(context,response.getStatusCode().getErrorMessage());

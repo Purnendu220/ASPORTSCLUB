@@ -44,7 +44,7 @@ public class SelectedItemViewHolder extends RecyclerView.ViewHolder {
         textItemQuantity.setText(model.getItemQuantity()+"");
         txtItemGst.setText(model.getTaxPercentage()+"");
 
-        double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getTaxPercentage())/100) + (model.getItemRate() * model.getItemQuantity());
+        double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getServiceCharge())/100)+(((model.getItemRate() * model.getItemQuantity())*model.getTaxPercentage())/100) + (model.getItemRate() * model.getItemQuantity());
 
 
         txtItemFinalPrice.setText(new DecimalFormat("##.##").format(finalprice)+"");
