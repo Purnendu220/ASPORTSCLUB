@@ -37,6 +37,7 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
     private int tableId,selctedVenderId;
     private Context context;
     private VenderTableDetail mTableDetail;
+    private String selectvenderName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,7 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
         tableId = getIntent().getIntExtra("tableId", 0);
         selctedVenderId = getIntent().getIntExtra("selctedVenderId",0);
         mTableDetail = (VenderTableDetail) getIntent().getSerializableExtra("tableDetail");
+        selectvenderName=getIntent().getStringExtra("vendername");
 
 
     }
@@ -101,6 +103,7 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
                     Intent i = new Intent(context, ItemActivity.class);
                     i.putExtra("memberDetail", response.getMembershipDetails());
                     i.putExtra("tableId",tableId);
+                    i.putExtra("vendername",selectvenderName);
                     i.putExtra("selctedVenderId",selctedVenderId);
                     i.putExtra("tableDetail",mTableDetail);
 

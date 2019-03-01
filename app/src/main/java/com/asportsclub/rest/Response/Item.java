@@ -26,7 +26,7 @@ private String taxDescription;
 private double taxPercentage;
 @SerializedName("ServiceCharge")
 @Expose
-private Double ServiceCharge;
+private double ServiceCharge;
 @SerializedName("UnitCode")
 @Expose
 private Integer UnitCode;

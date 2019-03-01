@@ -2,6 +2,7 @@ package com.asportsclub.viewholder;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,7 +20,7 @@ import java.text.DecimalFormat;
 public class SelectedItemViewHolder extends RecyclerView.ViewHolder {
 
     TextView textItemName,textItemRate,textItemQuantity,txtItemGst,txtItemFinalPrice;
-
+    LinearLayout llTop;
     private Context context;
 
 
@@ -33,18 +34,23 @@ public class SelectedItemViewHolder extends RecyclerView.ViewHolder {
         textItemQuantity = (TextView)itemView.findViewById(R.id.txtItemQuantity);
         txtItemGst = (TextView)itemView.findViewById(R.id.txtItemGst);
         txtItemFinalPrice = (TextView)itemView.findViewById(R.id.txtItemFinalPrice);
+        llTop=(LinearLayout)itemView.findViewById(R.id.llTop);
         RefrenceWrapper.getRefrenceWrapper(context).getFontTypeFace().setRobotoMediumTypeFace(context,textItemName,textItemQuantity,textItemRate,txtItemFinalPrice,txtItemGst);
 
     }
 
     public void bind(final Item model, final AdapterCallbacks adapterCallbacks, final int position) {
-
+        if(model.isItemOrderStatus()){
+            llTop.setBackgroundColor(ContextCompat.getColor(context,R.color.yellow));
+        }else{
+            llTop.setBackgroundColor(ContextCompat.getColor(context,R.color.white));
+        }
         textItemName.setText(model.getItemName());
         textItemRate.setText(model.getItemRate()+"");
         textItemQuantity.setText(model.getItemQuantity()+"");
-        txtItemGst.setText(model.getTaxPercentage()+"");
+        txtItemGst.setText(5+"");
 
-        double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getServiceCharge())/100)+(((model.getItemRate() * model.getItemQuantity())*model.getTaxPercentage())/100) + (model.getItemRate() * model.getItemQuantity());
+        double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getServiceCharge())/100)+(((model.getItemRate() * model.getItemQuantity())*5)/100) + (model.getItemRate() * model.getItemQuantity());
 
 
         txtItemFinalPrice.setText(new DecimalFormat("##.##").format(finalprice)+"");

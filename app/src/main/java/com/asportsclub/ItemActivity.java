@@ -64,6 +64,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     private ImageView imageViewLogout,imageViewSetting;
     private VenderTableDetail mTableDetail;
     private int billnumber=0;
+    private String selectvenderName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         setContentView(R.layout.activity_item);
         context=this;
         tableId = getIntent().getIntExtra("tableId",0);
+        selectvenderName=getIntent().getStringExtra("vendername");
         selctedVenderId = getIntent().getIntExtra("selctedVenderId",0);
         membershipDetails = (MembershipDetails) getIntent().getSerializableExtra("memberDetail");
         mTableDetail = (VenderTableDetail) getIntent().getSerializableExtra("tableDetail");
@@ -91,7 +93,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         imageViewLogout=(ImageView)findViewById(R.id.imageviewLogout);
         text_signin=(TextView)findViewById(R.id.text_signin);
         btn_proceed.setOnClickListener(this);
-        text_signin.setText(membershipDetails.getMembershipId());
+
 
         recyclerItemView.setLayoutManager(new LinearLayoutManager(ItemActivity.this));
         recyclerItemView.setHasFixedSize(false);
@@ -107,7 +109,8 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         mSelectedItemAdapter.addHeader(new ItemHeaderModel("Name","PRICE","QTY","GST","FINAL PRICE"));
         if(getIntent().hasExtra("billDetails")) {
             itemBillDetail = (ItemBillDetail) getIntent().getSerializableExtra("billDetails");
-
+            billnumber=itemBillDetail.getBillDetails().getBillNumber();
+            membershipDetails=itemBillDetail.getBillDetails().getMembershipDetails();
             for(int i=0;i<itemBillDetail.getBillDetails().getItemDetails().size();i++){
                 Item item=new Item();
                 item.setItemName(itemBillDetail.getBillDetails().getItemDetails().get(i).getItemName());
@@ -115,11 +118,16 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                 item.setItemQuantity(itemBillDetail.getBillDetails().getItemDetails().get(i).getQuantity());
                 item.setItemRate(itemBillDetail.getBillDetails().getItemDetails().get(i).getItemRate());
                 item.setTaxPercentage(itemBillDetail.getBillDetails().getItemDetails().get(i).getVatAmount());
+                item.setItemOrderStatus(true);
                 mSelectedItemList.add(item);
             }
             mSelectedItemAdapter.addAllItem(mSelectedItemList);
             mSelectedItemAdapter.notifyDataSetChanged();
         }
+        if(membershipDetails!=null)
+            text_signin.setText(selectvenderName+"("+membershipDetails.getMembershipId()+")");
+        else
+            text_signin.setText(selectvenderName+"("+itemBillDetail.getBillDetails().getMembershipDetails().getMembershipId()+")");
         handleItemAndTotal();
         hitGetItemList();
         RefrenceWrapper.getRefrenceWrapper(context).getFontTypeFace().setRobotoBoldTypeFace(context,txtTotalValue);
@@ -347,7 +355,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                         if(itemTotal==0){
                             ToastUtils.show(context,"You already placed your order.Add some items to update your order.");
                         }else{
-                            BillSaveApi requestBillSave = new BillSaveApi(billnumber, selctedVenderId, Integer.parseInt(userRespose.getUserDetail().getUserId()), membershipDetails.getMembershipId(), membershipDetails.getMemberType(), membershipDetails.getOpeningBalance(), mTableDetail.getTableName(), Integer.parseInt(edtPax.getText().toString()), membershipDetails.getCouponNumber(), itemTotal, itemTotalDecimal, billItems);
+                            BillSaveApi requestBillSave = new BillSaveApi(billnumber, selctedVenderId, Integer.parseInt(userRespose.getUserDetail().getUserId()), membershipDetails.getMembershipId(), membershipDetails.getMemberType(), membershipDetails.getOpeningBalance(), mTableDetail.getTableId(), Integer.parseInt(edtPax.getText().toString()), membershipDetails.getCouponNumber(), itemTotal, itemTotalDecimal, billItems);
                             hitBillSaveApi(requestBillSave);
                         }
 

@@ -26,9 +26,12 @@ public class ItemDetail implements Serializable {
     @SerializedName("ItemAmount")
     @Expose
     private double itemAmount;
+    @SerializedName("ServiceCharge")
+    @Expose
+    private double ServiceCharge;
     @SerializedName("VatRate")
     @Expose
-    private int vatRate;
+    private double vatRate;
     @SerializedName("VatAmount")
     @Expose
     private double vatAmount;
@@ -84,11 +87,11 @@ public class ItemDetail implements Serializable {
         this.itemAmount = itemAmount;
     }
 
-    public int getVatRate() {
+    public double getVatRate() {
         return vatRate;
     }
 
-    public void setVatRate(int vatRate) {
+    public void setVatRate(double vatRate) {
         this.vatRate = vatRate;
     }
 
@@ -108,4 +111,11 @@ public class ItemDetail implements Serializable {
         this.totalAmount = totalAmount;
     }
 
+    public double getServiceCharge() {
+        return ServiceCharge;
+    }
+
+    public void setServiceCharge(double serviceCharge) {
+        ServiceCharge = serviceCharge;
+    }
 }
