@@ -2,6 +2,7 @@ package com.asportsclub;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -78,14 +79,14 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
             return;
         }
         progressBar.setVisibility(View.VISIBLE);
-            hitApiToValidateMemberShip();
+            hitApiToValidateMemberShip(member_id);
 
 
     }
 
-    private void hitApiToValidateMemberShip() {
+    private void hitApiToValidateMemberShip(String member_id) {
 
-        Call<MembershipDetail> commentsCall = RestServiceFactory.createService().getMembershipValidation("T-0171"
+        Call<MembershipDetail> commentsCall = RestServiceFactory.createService().getMembershipValidation(member_id
         );
 
         commentsCall.enqueue(new RestCallBack<MembershipDetail>() {
@@ -97,7 +98,7 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
 
             @Override
             public void onResponse(Call<MembershipDetail> call, Response<MembershipDetail> restResponse, MembershipDetail response) {
-                if(response.getStatusCode().getErrorCode()==0){
+                if(response.getStatusCode().getErrorCode()==0&& response.getMembershipDetails()!=null){
                     progressBar.setVisibility(View.GONE);
                     ToastUtils.show(context,response.getMembershipDetails().getMemberName());
                     Intent i = new Intent(context, ItemActivity.class);
@@ -108,15 +109,31 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
                     i.putExtra("tableDetail",mTableDetail);
 
 
-                    startActivity(i);
-                    finish();
+                    startActivityForResult(i,101);
+
                 }
                 else{
+                    progressBar.setVisibility(View.GONE);
                     ToastUtils.show(context,response.getStatusCode().getErrorMessage());
                 }
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 101) {
+            if (resultCode == RESULT_OK) {
+                Intent in =new Intent();
+                in.putExtra("tableId",mTableDetail.getTableId());
+                setResult(RESULT_OK,in);
+                finish();
+            }else{
+                finish();
+            }
+        }
     }
 
     public void showTextView(final TextView view, String message) {

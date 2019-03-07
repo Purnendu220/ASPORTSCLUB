@@ -65,6 +65,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     private VenderTableDetail mTableDetail;
     private int billnumber=0;
     private String selectvenderName;
+    private boolean savebill;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -392,6 +393,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                             selectedItem.setItemOrderStatus(true);
                             selectedItem.setOrderedQuantity(selectedItem.getItemQuantity());
                             mSelectedItemAdapter.notifyItemChanged(i);
+                            savebill=true;
                         }
                     }
 
@@ -408,5 +410,16 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
 
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!getIntent().hasExtra("billDetails")&&savebill){
+            setResult(RESULT_OK);
+        }else {
+            finish();
+        }
+        super.onBackPressed();
+
     }
 }
