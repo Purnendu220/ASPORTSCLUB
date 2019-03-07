@@ -80,8 +80,8 @@ public class RestServiceFactory {
             String baseUrl = "";
 
 
-            //baseUrl = AppSharedPreferences.getInstance(AppContext.getInstance().getContext()).getURL();
-            baseUrl = ServiceConstants.BASE_SERVICE_URL;
+            baseUrl = AppSharedPreferences.getInstance(AppContext.getInstance().getContext()).getURL();
+            //baseUrl = ServiceConstants.BASE_SERVICE_URL;
 
 
             Retrofit.Builder builder =

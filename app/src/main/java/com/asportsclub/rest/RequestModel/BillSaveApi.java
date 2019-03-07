@@ -26,7 +26,7 @@ private String memberType;
 private Double openingBalance;
 @SerializedName("TableNumber")
 @Expose
-private String tableNumber;
+private int tableNumber;
 @SerializedName("PAX")
 @Expose
 private Integer pAX;
@@ -44,7 +44,7 @@ private Double roundOff;
 private List<BillItem> billItems = null;
 
 
-    public BillSaveApi(Integer billNumber, Integer locationCode, Integer userCode, String memberId, String memberType, Double openingBalance, String tableNumber, Integer pAX, Integer couponNumber, Double billAmount, Double roundOff, List<BillItem> billItems) {
+    public BillSaveApi(Integer billNumber, Integer locationCode, Integer userCode, String memberId, String memberType, Double openingBalance, int tableNumber, Integer pAX, Integer couponNumber, Double billAmount, Double roundOff, List<BillItem> billItems) {
         this.billNumber = billNumber;
         this.locationCode = locationCode;
         this.userCode = userCode;
@@ -107,11 +107,11 @@ public void setOpeningBalance(Double openingBalance) {
 this.openingBalance = openingBalance;
 }
 
-public String getTableNumber() {
+public int getTableNumber() {
 return tableNumber;
 }
 
-public void setTableNumber(String tableNumber) {
+public void setTableNumber(int tableNumber) {
 this.tableNumber = tableNumber;
 }
 

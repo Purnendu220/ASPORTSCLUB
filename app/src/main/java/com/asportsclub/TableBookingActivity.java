@@ -3,6 +3,7 @@ package com.asportsclub;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.asportsclub.rest.Response.VenderTableDetails;
 import com.asportsclub.rest.RestCallBack;
 import com.asportsclub.rest.RestServiceFactory;
 import com.asportsclub.utils.AdapterCallbacks;
+import com.asportsclub.utils.AppConstants;
 import com.asportsclub.utils.AppSharedPreferences;
 import com.asportsclub.utils.DialogUtils;
 import com.asportsclub.utils.GridAutofitLayoutManager;
@@ -57,6 +59,8 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
     private Context context;
     private ImageView imageViewLogout,imageViewSetting;
     private int selctedVenderId;
+    private String venderName;
+    private int RESULT_FOR_ITEMDETAIL=102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
         context = this;
         authenticateUserResponse = (AuthenticateUserResponse) getIntent().getSerializableExtra("vernderDetail");
         selctedVenderId = authenticateUserResponse.getUserValidVenderDetails().get(0).getVenderId();
+        venderName=authenticateUserResponse.getUserValidVenderDetails().get(0).getVenderName();
 
         recycler_table_view = (RecyclerView) findViewById(R.id.recycler_table_view);
         filterSpinner1 = (MaterialSpinner) findViewById(R.id.spinner_filter_one);
@@ -111,7 +116,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                 });
             }
         });
-        recycler_table_view.setLayoutManager(new GridAutofitLayoutManager(TableBookingActivity.this, 120));
+        recycler_table_view.setLayoutManager(new GridAutofitLayoutManager(TableBookingActivity.this, 200));
         recycler_table_view.setHasFixedSize(false);
         // recyclerViewClass.scrollToPosition(0);
 
@@ -158,7 +163,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                 if (model != null) {
                     Toast.makeText(context, model.getVenderName() + "", Toast.LENGTH_LONG);
                     progressBar.setVisibility(View.VISIBLE);
-                    hitApiTogetTableFromVenderId(model.getVenderId());
+                    hitApiTogetTableFromVenderId(model.getVenderId(),model.getVenderName());
 
                 }
             }
@@ -171,7 +176,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
 
     }
 
-    private void hitApiTogetTableFromVenderId(final int venderId) {
+    private void hitApiTogetTableFromVenderId(final int venderId, final String vendername) {
         Call<VenderTableDetails> commentsCall = RestServiceFactory.createService().getTableDataFromvenderId(venderId
         );
         commentsCall.enqueue(new RestCallBack<VenderTableDetails>() {
@@ -189,6 +194,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                     AppSharedPreferences.getInstance().setTableInfo(authenticateUserResponse);
                     setTableData();
                     selctedVenderId = venderId;
+                    venderName=vendername;
 
                 }
                 else{
@@ -276,6 +282,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                     Intent i = new Intent(context, ItemActivity.class);
                     i.putExtra("tableDetail",model);
                     i.putExtra("billDetails", response);
+                    i.putExtra("vendername",venderName);
                     i.putExtra("selctedVenderId",selctedVenderId);
 
                     startActivity(i);
@@ -321,12 +328,42 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                 Intent intent = new Intent(context, MemberValidationActivity.class);
                 intent.putExtra("tableId", selectedSeat);
                 intent.putExtra("selctedVenderId",selctedVenderId);
+                intent.putExtra("vendername",venderName);
                 intent.putExtra("tableDetail",data);
 
-                startActivity(intent);
+                startActivityForResult(intent,RESULT_FOR_ITEMDETAIL);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_FOR_ITEMDETAIL) {
+            if (resultCode == RESULT_OK) {
+               int tableId = data.getIntExtra("tableId",0);
+               ToastUtils.show(context,tableId+"");
+               setTableStatusData(tableId);
+            }else{
+
+            }
+        }
+    }
+
+    private void setTableStatusData(int tableId) {
+        list = new ArrayList<>();
+        for (int i = 0; i < authenticateUserResponse.getVenderTableDetails().size(); i++) {
+            if (authenticateUserResponse.getVenderTableDetails().get(i).getTableId()==tableId) {
+                authenticateUserResponse.getVenderTableDetails().get(i).setTableStatus(1);
+            }
+        }
+//        list.addAll(authenticateUserResponse.getVenderTableDetails());
+
+        tableBookingAdapter.clearAll();
+        tableBookingAdapter.addAllTableData(authenticateUserResponse.getVenderTableDetails());
+        tableBookingAdapter.notifyDataSetChanged();
+
     }
 }

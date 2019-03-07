@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +25,8 @@ import com.asportsclub.utils.AppSharedPreferences;
 import com.asportsclub.utils.StringUtils;
 import com.asportsclub.utils.ToastUtils;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -50,6 +54,24 @@ public class GlobalConfigurationActivity extends AppCompatActivity implements Vi
         progressBar=(ProgressBar)findViewById(R.id.progressBar);
         btn_validate.setOnClickListener(this);
 
+        edt_member_id.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    RestServiceFactory.apiService=null;
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         RefrenceWrapper.getRefrenceWrapper(this).getFontTypeFace().setRobotoMediumTypeFace(this,findViewById(R.id.text_signin));
         RefrenceWrapper.getRefrenceWrapper(this).getFontTypeFace().setRobotoRegularTypeFace(this,edt_member_id,btn_validate);
     }
@@ -66,7 +88,14 @@ public class GlobalConfigurationActivity extends AppCompatActivity implements Vi
 
     private void doValidation(){
         String url = edt_member_id.getText().toString();
-       boolean match= Patterns.WEB_URL.matcher(url).matches();
+        try {
+            URL mUrl=new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            ToastUtils.show(context,AppMessages.CommonSignInSignUpMessages.NO_MEMBERSHIP_ID);
+            return;
+        }
+        boolean match= Patterns.WEB_URL.matcher(url).matches();
         if (StringUtils.isEmpty(url)||!match) {
             ToastUtils.show(context,AppMessages.CommonSignInSignUpMessages.NO_MEMBERSHIP_ID);
             return;
@@ -94,6 +123,7 @@ public class GlobalConfigurationActivity extends AppCompatActivity implements Vi
             public void onResponse(Call<GlobalVenderDetails> call, Response<GlobalVenderDetails> restResponse, GlobalVenderDetails response) {
                 progressBar.setVisibility(View.GONE);
                 if (response.getStatusCode().getErrorCode() == 0) {
+                    AppSharedPreferences.getInstance().setValidurl("yes");
                     Intent i = new Intent(context, LoginActivity.class);
                     i.putExtra("globalvenderData",response);
                     i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

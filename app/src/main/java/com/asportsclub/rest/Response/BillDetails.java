@@ -17,9 +17,9 @@ public class BillDetails implements Serializable {
     @SerializedName("LocationCode")
     @Expose
     private int locationCode;
-    @SerializedName("MembershipCode")
+    @SerializedName("MembershipDetails")
     @Expose
-    private String membershipCode;
+    private MembershipDetails membershipDetails;
     @SerializedName("WaiterId")
     @Expose
     private int waiterId;
@@ -63,12 +63,12 @@ public class BillDetails implements Serializable {
         this.locationCode = locationCode;
     }
 
-    public String getMembershipCode() {
-        return membershipCode;
+    public MembershipDetails getMembershipDetails() {
+        return membershipDetails;
     }
 
-    public void setMembershipCode(String membershipCode) {
-        this.membershipCode = membershipCode;
+    public void setMembershipDetails(MembershipDetails membershipDetails) {
+        this.membershipDetails = membershipDetails;
     }
 
     public int getWaiterId() {
