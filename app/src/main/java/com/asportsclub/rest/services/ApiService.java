@@ -7,6 +7,7 @@ import com.asportsclub.rest.Response.GlobalVenderDetails;
 import com.asportsclub.rest.Response.ItemBillDetail;
 import com.asportsclub.rest.Response.MembershipDetail;
 import com.asportsclub.rest.Response.MenuItems;
+import com.asportsclub.rest.Response.OpenBillDetails;
 import com.asportsclub.rest.Response.ResponseModel;
 import com.asportsclub.rest.Response.SaveBillResponse;
 import com.asportsclub.rest.Response.VenderTableDetail;
@@ -72,5 +73,9 @@ public interface ApiService {
     Call<ItemBillDetail> getBillDetail(@Field("BillNumber") int billnumber,
                                        @Field("LocationCode") int locationcode
                                                       );
+
+    @Headers("Content-type: application/json")
+    @GET(ServiceConstants.GETALLOPENCHECKS)
+    Call<OpenBillDetails> getAllOpenChecks(@Query("VenderId") int venderId);
 
 }

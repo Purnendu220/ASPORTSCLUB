@@ -118,7 +118,8 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                 item.setItemCode(itemBillDetail.getBillDetails().getItemDetails().get(i).getItemCode());
                 item.setItemQuantity(itemBillDetail.getBillDetails().getItemDetails().get(i).getQuantity());
                 item.setItemRate(itemBillDetail.getBillDetails().getItemDetails().get(i).getItemRate());
-                item.setTaxPercentage(itemBillDetail.getBillDetails().getItemDetails().get(i).getVatAmount());
+                item.setTaxPercentage(itemBillDetail.getBillDetails().getItemDetails().get(i).getVatRate());
+                item.setServiceCharge(itemBillDetail.getBillDetails().getItemDetails().get(i).getServiceCharge());
                 item.setItemOrderStatus(true);
                 mSelectedItemList.add(item);
             }
@@ -345,7 +346,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                                 Item model = (Item) item;
                                 if(!model.isItemOrderStatus()){
                                     double finalprice = (((model.getItemRate() * (model.getItemQuantity()-model.getOrderedQuantity())) * model.getServiceCharge()) / 100) + (((model.getItemRate() * (model.getItemQuantity()-model.getOrderedQuantity())) * model.getTaxPercentage()) / 100) + (model.getItemRate() * (model.getItemQuantity()-model.getOrderedQuantity()));
-                                    billItems.add(new BillItem(model.getItemCode(), model.getUnitCode(), (model.getItemQuantity()-model.getOrderedQuantity()), model.getItemRate(), finalprice, (((model.getItemRate() * (model.getItemQuantity()-model.getOrderedQuantity())) * model.getTaxPercentage()) / 100),(((model.getItemRate() * (model.getItemQuantity()-model.getOrderedQuantity())) * model.getServiceCharge()) / 100) , model.getItemName(), Integer.parseInt(userRespose.getUserDetail().getUserId()), selctedVenderId));
+                                    billItems.add(new BillItem(model.getItemCode(), model.getUnitCode(), (model.getItemQuantity()-model.getOrderedQuantity()), model.getItemRate(), finalprice, (model.getTaxPercentage()),( model.getServiceCharge()) , model.getItemName(), Integer.parseInt(userRespose.getUserDetail().getUserId()), selctedVenderId));
 
                                 }
 

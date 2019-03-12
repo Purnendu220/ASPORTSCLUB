@@ -12,6 +12,7 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -25,6 +26,7 @@ import com.asportsclub.rest.Response.AuthenticateUserResponse;
 import com.asportsclub.rest.Response.GlobalVenderDetail;
 import com.asportsclub.rest.Response.GlobalVenderDetails;
 import com.asportsclub.rest.Response.ItemBillDetail;
+import com.asportsclub.rest.Response.OpenBillDetails;
 import com.asportsclub.rest.Response.UserValidVenderDetail;
 import com.asportsclub.rest.Response.VenderTableDetail;
 import com.asportsclub.rest.Response.VenderTableDetails;
@@ -61,6 +63,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
     private int selctedVenderId;
     private String venderName;
     private int RESULT_FOR_ITEMDETAIL=102;
+    private Button btn_openchecks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +82,15 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         imageViewSetting=(ImageView)findViewById(R.id.imageviewSetting);
         imageViewLogout=(ImageView)findViewById(R.id.imageviewLogout);
+        btn_openchecks=(Button)findViewById(R.id.btn_openchecks);
         progressBar.setVisibility(View.GONE);
+
+        btn_openchecks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hitApiTogetAllOpenChecks();
+            }
+        });
 
         imageViewSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -176,6 +187,29 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
 
     }
 
+    private void hitApiTogetAllOpenChecks() {
+        Call<OpenBillDetails> commentsCall = RestServiceFactory.createService().getAllOpenChecks(selctedVenderId
+        );
+        commentsCall.enqueue(new RestCallBack<OpenBillDetails>() {
+            @Override
+            public void onFailure(Call<OpenBillDetails> call, String message) {
+                ToastUtils.show(context, message);
+            }
+
+            @Override
+            public void onResponse(Call<OpenBillDetails> call, Response<OpenBillDetails> restResponse, OpenBillDetails response) {
+                if (response != null && response.getStatusCode().getErrorCode()==0) {
+                    Intent in=new Intent(context,OpenChecksActivity.class);
+                    in.putExtra("openCheckDetails",response);
+                    startActivity(in);
+
+                }else{
+                    ToastUtils.show(context,response.getStatusCode().getErrorMessage());
+                }
+            }
+        });
+    }
+
     private void hitApiTogetTableFromVenderId(final int venderId, final String vendername) {
         Call<VenderTableDetails> commentsCall = RestServiceFactory.createService().getTableDataFromvenderId(venderId
         );
@@ -188,7 +222,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
 
             @Override
             public void onResponse(Call<VenderTableDetails> call, Response<VenderTableDetails> restResponse, VenderTableDetails response) {
-                if (response != null && response.getVenderTableDetails().size() > 0) {
+                if (response != null && response.getStatusCode().getErrorCode()==0) {
                     progressBar.setVisibility(View.GONE);
                     authenticateUserResponse.setVenderTableDetails(response.getVenderTableDetails());
                     AppSharedPreferences.getInstance().setTableInfo(authenticateUserResponse);
@@ -198,6 +232,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
 
                 }
                 else{
+                    progressBar.setVisibility(View.GONE);
                     ToastUtils.show(context,response.getStatusCode().getErrorMessage());
                 }
             }
@@ -347,7 +382,8 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                ToastUtils.show(context,tableId+"");
                setTableStatusData(tableId);
             }else{
-
+                tableBookingAdapter.getList().get(selectedSeat).setTableStatus(0);
+                tableBookingAdapter.notifyItemChanged(selectedSeat);
             }
         }
     }
