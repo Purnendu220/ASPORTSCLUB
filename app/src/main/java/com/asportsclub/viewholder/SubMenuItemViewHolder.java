@@ -46,6 +46,7 @@ public class SubMenuItemViewHolder  extends RecyclerView.ViewHolder {
         itemAdapter = new ItemAdapter(context,false,adapterCallbacks);
         subMenuItems.setAdapter(itemAdapter);
         subMenuItems.setItemAnimator(new DefaultItemAnimator());
+       // if(model.getItems()!=null)
         itemAdapter.addAllItem(model.getItems());
         imageRight.setImageResource(R.drawable.list_arrow_down);
 

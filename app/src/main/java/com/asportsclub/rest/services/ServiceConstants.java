@@ -13,6 +13,7 @@ public class ServiceConstants {
     public static final String TABLEDATAFROMVENDERID="/api/GetVenderTableInfo";
     public static final String MEMBERSHIPVALIDATION="/api/ValidateMembershipId";
     public static final String BILLDETAILS = "/api/GetBillDetails";
+    public static final String GETALLOPENCHECKS="/api/GetAllOpenBillsdetails";
 
     public static final String ITEM_LIST = "/api/GetMenuDetails";
     public static final String SAVE_BILL = "/api/SaveBill";

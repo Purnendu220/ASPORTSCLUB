@@ -54,6 +54,9 @@
         <activity
             android:name=".MemberValidationActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".OpenChecksActivity"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>
