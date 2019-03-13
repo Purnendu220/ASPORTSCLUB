@@ -379,8 +379,9 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
         if (requestCode == RESULT_FOR_ITEMDETAIL) {
             if (resultCode == RESULT_OK) {
                int tableId = data.getIntExtra("tableId",0);
+               int billNo = data.getIntExtra("billNo",0);
                ToastUtils.show(context,tableId+"");
-               setTableStatusData(tableId);
+               setTableStatusData(tableId,billNo);
             }else{
                 tableBookingAdapter.getList().get(selectedSeat).setTableStatus(0);
                 tableBookingAdapter.notifyItemChanged(selectedSeat);
@@ -388,11 +389,12 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
         }
     }
 
-    private void setTableStatusData(int tableId) {
+    private void setTableStatusData(int tableId, int billNo) {
         list = new ArrayList<>();
         for (int i = 0; i < authenticateUserResponse.getVenderTableDetails().size(); i++) {
             if (authenticateUserResponse.getVenderTableDetails().get(i).getTableId()==tableId) {
                 authenticateUserResponse.getVenderTableDetails().get(i).setTableStatus(1);
+                authenticateUserResponse.getVenderTableDetails().get(i).setBillNumber(billNo);
             }
         }
 //        list.addAll(authenticateUserResponse.getVenderTableDetails());

@@ -128,6 +128,7 @@ public class MemberValidationActivity extends AppCompatActivity implements View.
             if (resultCode == RESULT_OK) {
                 Intent in =new Intent();
                 in.putExtra("tableId",mTableDetail.getTableId());
+                in.putExtra("billNo",data.getIntExtra("billNo",0));
                 setResult(RESULT_OK,in);
                 finish();
             }else{

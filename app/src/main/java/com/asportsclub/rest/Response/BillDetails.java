@@ -38,6 +38,10 @@ public class BillDetails implements Serializable {
     @SerializedName("ItemDetails")
     @Expose
     private List<ItemDetail> itemDetails = null;
+    @SerializedName("PAX")
+    @Expose
+    private int PAX;
+
 
     public int getBillNumber() {
         return billNumber;
@@ -119,4 +123,11 @@ public class BillDetails implements Serializable {
         this.itemDetails = itemDetails;
     }
 
+    public int getPAX() {
+        return PAX;
+    }
+
+    public void setPAX(int PAX) {
+        this.PAX = PAX;
+    }
 }
