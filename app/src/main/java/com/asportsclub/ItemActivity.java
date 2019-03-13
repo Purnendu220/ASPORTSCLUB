@@ -111,6 +111,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         if(getIntent().hasExtra("billDetails")) {
             itemBillDetail = (ItemBillDetail) getIntent().getSerializableExtra("billDetails");
             billnumber=itemBillDetail.getBillDetails().getBillNumber();
+            edtPax.setText(itemBillDetail.getBillDetails().getPAX()+"");
             membershipDetails=itemBillDetail.getBillDetails().getMembershipDetails();
             for(int i=0;i<itemBillDetail.getBillDetails().getItemDetails().size();i++){
                 Item item=new Item();
@@ -416,7 +417,9 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     @Override
     public void onBackPressed() {
         if(!getIntent().hasExtra("billDetails")&&savebill){
-            setResult(RESULT_OK);
+            Intent i=new Intent();
+            i.putExtra("billNo",billnumber);
+            setResult(RESULT_OK,i);
         }else {
             finish();
         }
