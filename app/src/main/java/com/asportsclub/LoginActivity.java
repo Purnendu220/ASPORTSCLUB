@@ -224,7 +224,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private void hitApiToAuthenticateUser(String email, String password, int mSelectVenderId) {
+    private void hitApiToAuthenticateUser(String email, String password, final int mSelectVenderId) {
 
         UserAuthenticateRequest userAuthenticateRequest = new UserAuthenticateRequest(email, password, mSelectVenderId);
         Call<AuthenticateUserResponse> userResponseCall = RestServiceFactory.createService().getAuthenticateUser(email, password, mSelectVenderId
@@ -243,6 +243,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if (response.getVenderTableDetails().size() > 0) {
                         AppSharedPreferences.getInstance().setuserName(response.getUserDetail().getUserName());
                         AppSharedPreferences.getInstance().setTableInfo(response);
+                        AppSharedPreferences.getInstance().setVendorid(mSelectVenderId);
                         Intent i = new Intent(context, TableBookingActivity.class);
                         i.putExtra("vernderDetail", response);
                         startActivity(i);

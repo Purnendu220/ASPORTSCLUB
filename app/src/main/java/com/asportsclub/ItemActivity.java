@@ -347,7 +347,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                                 Item model = (Item) item;
                                 if(!model.isItemOrderStatus()){
                                     double finalprice = (((model.getItemRate() * (model.getItemQuantity()-model.getOrderedQuantity())) * model.getServiceCharge()) / 100) + (((model.getItemRate() * (model.getItemQuantity()-model.getOrderedQuantity())) * model.getTaxPercentage()) / 100) + (model.getItemRate() * (model.getItemQuantity()-model.getOrderedQuantity()));
-                                    billItems.add(new BillItem(model.getItemCode(), model.getUnitCode(), (model.getItemQuantity()-model.getOrderedQuantity()), model.getItemRate(), finalprice, (model.getTaxPercentage()),( model.getServiceCharge()) , model.getItemName(), Integer.parseInt(userRespose.getUserDetail().getUserId()), selctedVenderId));
+                                    billItems.add(new BillItem(model.getItemCode(), model.getUnitCode(), (model.getItemQuantity()-model.getOrderedQuantity()), model.getItemRate(), finalprice, (model.getTaxPercentage()),( model.getServiceCharge()) , model.getItemName(), Integer.parseInt(userRespose.getUserDetail().getUserId()), Integer.parseInt(AppSharedPreferences.getInstance().getvendorID())));
 
                                 }
 
@@ -358,7 +358,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                         if(itemTotal==0){
                             ToastUtils.show(context,"You already placed your order.Add some items to update your order.");
                         }else{
-                            BillSaveApi requestBillSave = new BillSaveApi(billnumber, selctedVenderId, Integer.parseInt(userRespose.getUserDetail().getUserId()), membershipDetails.getMembershipId(), membershipDetails.getMemberType(), membershipDetails.getOpeningBalance(), mTableDetail.getTableId(), Integer.parseInt(edtPax.getText().toString()), membershipDetails.getCouponNumber(), itemTotal, itemTotalDecimal, billItems);
+                            BillSaveApi requestBillSave = new BillSaveApi(billnumber, Integer.parseInt(AppSharedPreferences.getInstance().getvendorID()), Integer.parseInt(userRespose.getUserDetail().getUserId()), membershipDetails.getMembershipId(), membershipDetails.getMemberType(), membershipDetails.getOpeningBalance(), mTableDetail.getTableId(), Integer.parseInt(edtPax.getText().toString()), membershipDetails.getCouponNumber(), itemTotal, itemTotalDecimal, billItems);
                             hitBillSaveApi(requestBillSave);
                         }
 
