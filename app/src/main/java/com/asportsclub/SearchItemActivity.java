@@ -92,7 +92,7 @@ public class SearchItemActivity extends AppCompatActivity implements AdapterCall
             @Override
             public void afterTextChanged(final Editable editable) {
                 if (editable.toString().length() >= SEARCH_LIMIT) {
-                    setItemAdapter(editable.toString());
+                    setItemAdapter(editable.toString().toLowerCase());
 
                 }else{
                     setItemAdapter("");
@@ -136,7 +136,7 @@ public class SearchItemActivity extends AppCompatActivity implements AdapterCall
       ArrayList<Item>  filteredList = new ArrayList<>();
       if(filter!=null&&filter.length()>0){
           for (Item item:itemList) {
-              if(item.getItemName().contains(filter)){
+              if(item.getItemName().toLowerCase().contains(filter)){
                   filteredList.add(item);
               }
 
