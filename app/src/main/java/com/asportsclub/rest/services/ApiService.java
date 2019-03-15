@@ -54,7 +54,8 @@ public interface ApiService {
                                                        @Field("VenderId") int venderID);
     @Headers("Content-type: application/json")
     @GET(ServiceConstants.TABLEDATAFROMVENDERID)
-    Call<VenderTableDetails> getTableDataFromvenderId(@Query("VenderId") int venderId);
+    Call<VenderTableDetails> getTableDataFromvenderId(@Query("MainLocationCode") int venderId,
+                                                      @Query("CurrentLocationCode") int currentvenderId);
 
     @Headers("Content-type: application/json")
     @GET(ServiceConstants.MEMBERSHIPVALIDATION)
@@ -76,6 +77,7 @@ public interface ApiService {
 
     @Headers("Content-type: application/json")
     @GET(ServiceConstants.GETALLOPENCHECKS)
-    Call<OpenBillDetails> getAllOpenChecks(@Query("VenderId") int venderId);
+    Call<OpenBillDetails> getAllOpenChecks(@Query("MainLocationCode") int venderId,
+                                           @Query("CurrentLocationCode") int currentvenderId);
 
 }

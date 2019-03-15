@@ -64,6 +64,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
     private String venderName;
     private int RESULT_FOR_ITEMDETAIL=102;
     private Button btn_openchecks;
+    private int selctedVenderIdNew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +76,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
         authenticateUserResponse = (AuthenticateUserResponse) getIntent().getSerializableExtra("vernderDetail");
         selctedVenderId = authenticateUserResponse.getUserValidVenderDetails().get(0).getVenderId();
         venderName=authenticateUserResponse.getUserValidVenderDetails().get(0).getVenderName();
-
+        selctedVenderIdNew=selctedVenderId;
         recycler_table_view = (RecyclerView) findViewById(R.id.recycler_table_view);
         filterSpinner1 = (MaterialSpinner) findViewById(R.id.spinner_filter_one);
         filterSpinner2 = (Spinner) findViewById(R.id.spinner_filter_two);
@@ -188,7 +189,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
     }
 
     private void hitApiTogetAllOpenChecks() {
-        Call<OpenBillDetails> commentsCall = RestServiceFactory.createService().getAllOpenChecks(selctedVenderId
+        Call<OpenBillDetails> commentsCall = RestServiceFactory.createService().getAllOpenChecks(selctedVenderId,selctedVenderIdNew
         );
         commentsCall.enqueue(new RestCallBack<OpenBillDetails>() {
             @Override
@@ -211,7 +212,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
     }
 
     private void hitApiTogetTableFromVenderId(final int venderId, final String vendername) {
-        Call<VenderTableDetails> commentsCall = RestServiceFactory.createService().getTableDataFromvenderId(venderId
+        Call<VenderTableDetails> commentsCall = RestServiceFactory.createService().getTableDataFromvenderId(selctedVenderId,venderId
         );
         commentsCall.enqueue(new RestCallBack<VenderTableDetails>() {
             @Override
@@ -227,7 +228,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                     authenticateUserResponse.setVenderTableDetails(response.getVenderTableDetails());
                     AppSharedPreferences.getInstance().setTableInfo(authenticateUserResponse);
                     setTableData();
-                    selctedVenderId = venderId;
+                    selctedVenderIdNew = venderId;
                     venderName=vendername;
 
                 }
@@ -288,7 +289,6 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
 
             case R.id.textViewTable:
                 if (model.getTableStatus() == 1) {
-                    Snackbar.make(view, "This table is occupied", Snackbar.LENGTH_LONG).show();
                     progressBar.setVisibility(View.VISIBLE);
                     hitApiTogetBilldetail(model.getBillNumber(),model.getLocationCode(),model);
 
@@ -318,7 +318,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                     i.putExtra("tableDetail",model);
                     i.putExtra("billDetails", response);
                     i.putExtra("vendername",venderName);
-                    i.putExtra("selctedVenderId",selctedVenderId);
+                    i.putExtra("selctedVenderId",selctedVenderIdNew);
 
                     startActivity(i);
                 }
@@ -362,7 +362,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                 }
                 Intent intent = new Intent(context, MemberValidationActivity.class);
                 intent.putExtra("tableId", selectedSeat);
-                intent.putExtra("selctedVenderId",selctedVenderId);
+                intent.putExtra("selctedVenderId",selctedVenderIdNew);
                 intent.putExtra("vendername",venderName);
                 intent.putExtra("tableDetail",data);
 
@@ -379,8 +379,9 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
         if (requestCode == RESULT_FOR_ITEMDETAIL) {
             if (resultCode == RESULT_OK) {
                int tableId = data.getIntExtra("tableId",0);
+               int billNo = data.getIntExtra("billNo",0);
                ToastUtils.show(context,tableId+"");
-               setTableStatusData(tableId);
+               setTableStatusData(tableId,billNo);
             }else{
                 tableBookingAdapter.getList().get(selectedSeat).setTableStatus(0);
                 tableBookingAdapter.notifyItemChanged(selectedSeat);
@@ -388,11 +389,12 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
         }
     }
 
-    private void setTableStatusData(int tableId) {
+    private void setTableStatusData(int tableId, int billNo) {
         list = new ArrayList<>();
         for (int i = 0; i < authenticateUserResponse.getVenderTableDetails().size(); i++) {
             if (authenticateUserResponse.getVenderTableDetails().get(i).getTableId()==tableId) {
                 authenticateUserResponse.getVenderTableDetails().get(i).setTableStatus(1);
+                authenticateUserResponse.getVenderTableDetails().get(i).setBillNumber(billNo);
             }
         }
 //        list.addAll(authenticateUserResponse.getVenderTableDetails());
