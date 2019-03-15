@@ -57,7 +57,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     int tableId,selctedVenderId;
     MembershipDetails membershipDetails;
     ItemBillDetail itemBillDetail;
-    TextView txtTotalValue,text_signin;
+    TextView txtTotalValue,text_signin,txtClosingBalanceValue,textOpeningBalance;
     EditText edtPax;
     private RelativeLayout layoutTotal;
     private LinearLayout layoutNoData;
@@ -98,6 +98,10 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         imageViewLogout=(ImageView)findViewById(R.id.imageviewLogout);
         imageviewSearch=(ImageView)findViewById(R.id.imageviewSearch);
         text_signin=(TextView)findViewById(R.id.text_signin);
+        txtClosingBalanceValue=(TextView)findViewById(R.id.txtClosingBalanceValue);
+        textOpeningBalance=(TextView)findViewById(R.id.textOpeningBalance);
+
+
         btn_proceed.setOnClickListener(this);
         imageviewSearch.setOnClickListener(this);
 
@@ -175,6 +179,11 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                 });
             }
         });
+        textOpeningBalance.setText(""+membershipDetails.getOpeningBalance());
+        setClosingBalance();
+    }
+    private void setClosingBalance(){
+        txtClosingBalanceValue.setText((membershipDetails.getOpeningBalance()-getItemTotal())+"");
     }
 
     private void hitGetItemList() {
@@ -312,6 +321,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             layoutTotal.setVisibility(View.GONE);
             layoutNoData.setVisibility(View.VISIBLE);
         }
+        setClosingBalance();
 
     }
     public double handleItemAndTotalBeforeAdd(Item itemToAdd){
