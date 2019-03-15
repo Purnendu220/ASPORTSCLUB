@@ -20,6 +20,8 @@
             android:textColor="@color/white"
             android:textSize="25sp" />
 
+
+
         <ImageView
             android:id="@+id/imageviewSetting"
             android:layout_width="wrap_content"
@@ -35,6 +37,16 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/imageviewSetting"
             android:layout_toStartOf="@+id/imageviewSetting"
+            android:paddingTop="@dimen/margin_10"
+            android:paddingBottom="@dimen/margin_10"
+            android:src="@drawable/settings_icon" />
+
+        <ImageView
+            android:id="@+id/imageviewSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/imageviewLogout"
+            android:layout_toStartOf="@+id/imageviewLogout"
             android:paddingTop="@dimen/margin_10"
             android:paddingBottom="@dimen/margin_10"
             android:src="@drawable/settings_icon" />

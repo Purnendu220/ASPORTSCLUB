@@ -28,8 +28,10 @@ import com.asportsclub.rest.Response.Item;
 import com.asportsclub.rest.Response.ItemBillDetail;
 import com.asportsclub.rest.Response.ItemHeaderModel;
 import com.asportsclub.rest.Response.MembershipDetails;
+import com.asportsclub.rest.Response.MenuItem;
 import com.asportsclub.rest.Response.MenuItems;
 import com.asportsclub.rest.Response.SaveBillResponse;
+import com.asportsclub.rest.Response.SubMenuItem;
 import com.asportsclub.rest.Response.VenderTableDetail;
 import com.asportsclub.rest.RestCallBack;
 import com.asportsclub.rest.RestServiceFactory;
@@ -61,11 +63,13 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     private LinearLayout layoutNoData;
     private Button btn_proceed;
     private Context context;
-    private ImageView imageViewLogout,imageViewSetting;
+    private ImageView imageViewLogout,imageViewSetting,imageviewSearch;
     private VenderTableDetail mTableDetail;
     private int billnumber=0;
     private String selectvenderName;
     private boolean savebill;
+    private MenuItems mMenuItes;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +96,10 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         btn_proceed = (Button)findViewById(R.id.btn_proceed);
         imageViewSetting=(ImageView)findViewById(R.id.imageviewSetting);
         imageViewLogout=(ImageView)findViewById(R.id.imageviewLogout);
+        imageviewSearch=(ImageView)findViewById(R.id.imageviewSearch);
         text_signin=(TextView)findViewById(R.id.text_signin);
         btn_proceed.setOnClickListener(this);
+        imageviewSearch.setOnClickListener(this);
 
 
         recyclerItemView.setLayoutManager(new LinearLayoutManager(ItemActivity.this));
@@ -182,6 +188,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
 
             @Override
             public void onResponse(Call<MenuItems> call, Response<MenuItems> restResponse, MenuItems response) {
+                mMenuItes = response;
                 menuItemAdapter.addAllItem(response.getMenuItems());
 
             }
@@ -190,76 +197,13 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
 
     @Override
     public void onAdapterItemClick(RecyclerView.ViewHolder viewHolder, View view, Item model, int position) {
-        int itemPosition = -1;
 
         switch (view.getId()) {
             case R.id.minusButton:
-                if(model.isItemOrderStatus()){
-                    ToastUtils.show(context,"Can't remove items that has been ordered");
-                }else{
-                    for(int i=0;i<mSelectedItemList.size();i++){
-                        if(model.getItemCode() == mSelectedItemList.get(i).getItemCode()){
-                            itemPosition = i+1;
-                        }
-                    }
-                    if(model.getItemQuantity()>0){
-                        if(itemPosition > -1){
-                            Item selectedItem = (Item) mSelectedItemAdapter.getItem(itemPosition);
-                            selectedItem.setItemQuantity(model.getItemQuantity());
-                            mSelectedItemAdapter.notifyItemChanged(itemPosition);
-
-
-
-                        }else{
-                            mSelectedItemList.add(model);
-                            mSelectedItemAdapter.addItem(model);
-                            mSelectedItemAdapter.notifyDataSetChanged();
-
-                        }
-                    }
-                    else{
-                        mSelectedItemAdapter.removeItem(itemPosition);
-                        mSelectedItemList.remove(itemPosition-1);
-
-                    }
-                    handleItemAndTotal();
-                }
-
+                removeItems(model);
                 break;
             case R.id.plusButton:
-                double itemsPrice = handleItemAndTotalBeforeAdd(model);
-                if(membershipDetails.getMemberType()=="D"||membershipDetails.getMemberType()=="X"){
-                    if(itemsPrice > membershipDetails.getOpeningBalance()){
-                        ToastUtils.show(context,"You can't add this item your balace is low.");
-                        return;
-                    }
-                }
-
-                for(int i=0;i<mSelectedItemList.size();i++){
-                    if(model.getItemCode() == mSelectedItemList.get(i).getItemCode()){
-                        itemPosition = i+1;
-                    }
-                }
-                if(model.getItemQuantity()>0){
-                    if(itemPosition > -1){
-                        Item selectedItem = (Item) mSelectedItemAdapter.getItem(itemPosition);
-                        selectedItem.setItemQuantity(model.getItemQuantity());
-                        selectedItem.setItemOrderStatus(false);
-                        mSelectedItemAdapter.notifyItemChanged(itemPosition);
-
-
-                    }else{
-                        model.setItemOrderStatus(false);
-                        mSelectedItemList.add(model);
-                        mSelectedItemAdapter.addItem(model);
-                        mSelectedItemAdapter.notifyDataSetChanged();
-
-                    }
-                }
-                else{
-                    mSelectedItemAdapter.removeItem(itemPosition);
-                }
-                handleItemAndTotal();
+                addItem(model);
                 break;
         }
     }
@@ -271,6 +215,76 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
 
     @Override
     public void onShowLastItem() {
+
+    }
+
+    private void removeItems(Item model){
+        int itemPosition = -1;
+        if(model.isItemOrderStatus()){
+            ToastUtils.show(context,"Can't remove items that has been ordered");
+        }else{
+            for(int i=0;i<mSelectedItemList.size();i++){
+                if(model.getItemCode() == mSelectedItemList.get(i).getItemCode()){
+                    itemPosition = i+1;
+                }
+            }
+            if(model.getItemQuantity()>0){
+                if(itemPosition > -1){
+                    Item selectedItem = (Item) mSelectedItemAdapter.getItem(itemPosition);
+                    selectedItem.setItemQuantity(model.getItemQuantity());
+                    mSelectedItemAdapter.notifyItemChanged(itemPosition);
+
+
+
+                }else{
+                    mSelectedItemList.add(model);
+                    mSelectedItemAdapter.addItem(model);
+                    mSelectedItemAdapter.notifyDataSetChanged();
+
+                }
+            }
+            else{
+                mSelectedItemAdapter.removeItem(itemPosition);
+                mSelectedItemList.remove(itemPosition-1);
+
+            }
+            handleItemAndTotal();
+        }
+    }
+    private void addItem(Item model){
+        int itemPosition = -1;
+        double itemsPrice = handleItemAndTotalBeforeAdd(model);
+        if(membershipDetails.getMemberType()=="D"||membershipDetails.getMemberType()=="X"){
+            if(itemsPrice > membershipDetails.getOpeningBalance()){
+                ToastUtils.show(context,"You can't add this item your balace is low.");
+                return;
+            }
+        }
+        for(int i=0;i<mSelectedItemList.size();i++){
+            if(model.getItemCode() == mSelectedItemList.get(i).getItemCode()){
+                itemPosition = i+1;
+            }
+        }
+        if(model.getItemQuantity()>0){
+            if(itemPosition > -1){
+                Item selectedItem = (Item) mSelectedItemAdapter.getItem(itemPosition);
+                selectedItem.setItemQuantity(model.getItemQuantity());
+                selectedItem.setItemOrderStatus(false);
+                mSelectedItemAdapter.notifyItemChanged(itemPosition);
+
+
+            }else{
+                model.setItemOrderStatus(false);
+                mSelectedItemList.add(model);
+                mSelectedItemAdapter.addItem(model);
+                mSelectedItemAdapter.notifyDataSetChanged();
+
+            }
+        }
+        else{
+            mSelectedItemAdapter.removeItem(itemPosition);
+        }
+        handleItemAndTotal();
 
     }
 
@@ -301,18 +315,10 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     }
     public double handleItemAndTotalBeforeAdd(Item itemToAdd){
         if(mSelectedItemAdapter.getItemCount()>1){
-            double totalValue=0;
-            for (Object item:mSelectedItemAdapter.getList()) {
-                if(item instanceof Item){
-                    Item model = (Item) item;
-                    double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getServiceCharge())/100)+(((model.getItemRate() * model.getItemQuantity())*model.getTaxPercentage())/100) + (model.getItemRate() * model.getItemQuantity());
-
-                    totalValue += finalprice;
-                }
-            }
+            double totalValue=getItemTotal();
             double finalprice = (((itemToAdd.getItemRate() * itemToAdd.getItemQuantity())*itemToAdd.getServiceCharge())/100)+(((itemToAdd.getItemRate() * itemToAdd.getItemQuantity())*itemToAdd.getTaxPercentage())/100) + (itemToAdd.getItemRate() * itemToAdd.getItemQuantity());
 
-            totalValue += finalprice;
+            totalValue = totalValue + finalprice;
             return totalValue;
         }
      return 0;
@@ -371,6 +377,13 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                 }
 
                 break;
+            case R.id.imageviewSearch:
+                Intent i = new Intent(context, SearchItemActivity.class);
+                i.putExtra("menuItem",mMenuItes);
+                i.putExtra("memberDetail",membershipDetails);
+                i.putExtra("itemsTotal",getItemTotal());
+                startActivityForResult(i,1001);
+                break;
         }
     }
     private void hitBillSaveApi(BillSaveApi requestBillSave) {
@@ -411,6 +424,89 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
 
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        // check if the request code is same as what is passed  here it is 2
+        if(requestCode == 1001)
+
+        {
+            if(data!=null){
+                ArrayList<Item> list = (ArrayList<Item>) data.getSerializableExtra("selectedItems");
+
+
+                for (Item model:list) {
+                    setupSearchItemList(model);
+                    //addItemFromSearch(model);
+
+                }
+                menuItemAdapter.clearAll();
+
+                menuItemAdapter.addAllItem(mMenuItes.getMenuItems());
+                menuItemAdapter.notifyDataSetChanged();
+
+
+            }
+
+        }
+    }
+
+    private void setupSearchItemList(Item model){
+        for (MenuItem menuItem:mMenuItes.getMenuItems()) {
+            if(menuItem.getSubMenuItems().size()>0){
+                for (SubMenuItem subMenuItem:menuItem.getSubMenuItems()) {
+                    if(subMenuItem.getItems().size()>0){
+                        for (Item item:subMenuItem.getItems()) {
+                            if(model.getItemCode()==item.getItemCode()){
+                                item.setItemQuantity(item.getItemQuantity()+model.getItemQuantity());
+                                addItem(item);
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private void addItemFromSearch(Item model){
+        int itemPosition = -1;
+        double itemsPrice = handleItemAndTotalBeforeAdd(model);
+        if(membershipDetails.getMemberType()=="D"||membershipDetails.getMemberType()=="X"){
+            if(itemsPrice > membershipDetails.getOpeningBalance()){
+                ToastUtils.show(context,"You can't add this item your balace is low.");
+                return;
+            }
+        }
+        for(int i=0;i<mSelectedItemList.size();i++){
+            if(model.getItemCode() == mSelectedItemList.get(i).getItemCode()){
+                itemPosition = i+1;
+            }
+        }
+        if(model.getItemQuantity()>0){
+            if(itemPosition > -1){
+                Item selectedItem = (Item) mSelectedItemAdapter.getItem(itemPosition);
+                int itemQuantity =selectedItem.getItemQuantity();
+                selectedItem.setItemQuantity(model.getItemQuantity());
+                selectedItem.setItemOrderStatus(false);
+                mSelectedItemAdapter.notifyItemChanged(itemPosition);
+
+
+            }else{
+                model.setItemOrderStatus(false);
+                mSelectedItemList.add(model);
+                mSelectedItemAdapter.addItem(model);
+                mSelectedItemAdapter.notifyDataSetChanged();
+
+            }
+        }
+        else{
+            mSelectedItemAdapter.removeItem(itemPosition);
+        }
+        handleItemAndTotal();
+
     }
 
     @Override

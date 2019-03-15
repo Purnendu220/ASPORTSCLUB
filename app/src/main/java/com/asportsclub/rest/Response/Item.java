@@ -5,13 +5,14 @@ package com.asportsclub.rest.Response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Item {
+public class Item implements Serializable {
 
 @SerializedName("ItemCode")
 @Expose
-private Integer itemCode;
+private int itemCode;
 @SerializedName("ItemName")
 @Expose
 private String itemName;
@@ -37,11 +38,11 @@ private int itemQuantity;
 private boolean itemOrderStatus;
 private int orderedQuantity;
 
-public Integer getItemCode() {
+public int getItemCode() {
 return itemCode;
 }
 
-public void setItemCode(Integer itemCode) {
+public void setItemCode(int itemCode) {
 this.itemCode = itemCode;
 }
 

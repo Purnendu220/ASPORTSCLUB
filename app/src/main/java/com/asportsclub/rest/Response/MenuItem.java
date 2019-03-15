@@ -3,9 +3,10 @@ package com.asportsclub.rest.Response;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class MenuItem {
+public class MenuItem implements Serializable {
 
 @SerializedName("MenuCode")
 @Expose
