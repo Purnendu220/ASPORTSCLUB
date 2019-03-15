@@ -49,7 +49,7 @@
             android:layout_toStartOf="@+id/imageviewLogout"
             android:paddingTop="@dimen/margin_10"
             android:paddingBottom="@dimen/margin_10"
-            android:src="@drawable/settings_icon" />
+            android:src="@drawable/search_item" />
     </RelativeLayout>
 
     <LinearLayout
