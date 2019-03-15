@@ -78,27 +78,64 @@
             android:layout_marginLeft="@dimen/margin_20"
             android:weightSum="10"
             >
-            <android.support.design.widget.TextInputLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight=".5">
-
-                <EditText
-                    android:id="@+id/edt_pax"
-                    android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight=".5"
+                android:weightSum="2"
+                >
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="PAX"
-                    android:imeOptions="actionDone"
-                    android:inputType="number" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_weight=".5">
+
+                    <EditText
+                        android:id="@+id/edt_pax"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="PAX"
+                        android:imeOptions="actionDone"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1.5"
+                    android:layout_gravity="center"
+
+
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Opening Balance:"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:textSize="@dimen/text_16"
+                        android:textStyle="bold"
+                        />
+                    <TextView
+                        android:id="@+id/textOpeningBalance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1234"
+                        android:layout_marginLeft="@dimen/margin_10"
+                        android:textSize="@dimen/text_16"
+                        />
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginBottom="@dimen/margin_10"
                 android:layout_weight="7.5"
                 >
-
-
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/itemSelectedView"
                     android:layout_width="match_parent"
@@ -125,6 +162,40 @@
 
 
                 >
+                <LinearLayout
+                    android:id="@+id/linearClosingBalanceLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginBottom="@dimen/margin_10"
+
+                    >
+                    <TextView
+                        android:id="@+id/txtClosingBalance"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Closing Balance:"
+                        android:textSize="@dimen/text_16"
+                        android:layout_weight="1"
+                        android:textStyle="bold"
+                        android:gravity="left"
+                        />
+
+                    <TextView
+                        android:id="@+id/txtClosingBalanceValue"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="200000"
+                        android:textSize="@dimen/text_16"
+                        android:gravity="center"
+                        />
+
+
+
+                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/linearTotalLayout"
                     android:layout_width="300dp"
