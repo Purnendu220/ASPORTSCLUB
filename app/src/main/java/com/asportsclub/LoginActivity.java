@@ -179,6 +179,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         AppSharedPreferences.getInstance().setUrl("");
+                        AppSharedPreferences.getInstance().setValidurl("no");
                         RestServiceFactory.apiService=null;
                         AppSharedPreferences.getInstance().setuserName("");
                         AppSharedPreferences.getInstance().setTableInfo(null);
