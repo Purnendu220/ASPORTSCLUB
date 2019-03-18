@@ -152,6 +152,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         AppSharedPreferences.getInstance().setUrl("");
                         AppSharedPreferences.getInstance().setuserName("");
+                        AppSharedPreferences.getInstance().setValidurl("no");
                         RestServiceFactory.apiService=null;
                         AppSharedPreferences.getInstance().setTableInfo(null);
                         Intent i = new Intent(context, GlobalConfigurationActivity.class);
@@ -183,7 +184,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         setClosingBalance();
     }
     private void setClosingBalance(){
-        txtClosingBalanceValue.setText((membershipDetails.getOpeningBalance()-getItemTotal())+"");
+        txtClosingBalanceValue.setText(String.format("%.2f",(membershipDetails.getOpeningBalance()-getItemTotal())));
     }
 
     private void hitGetItemList() {
@@ -411,7 +412,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             public void onResponse(Call<SaveBillResponse> call, Response<SaveBillResponse> restResponse, SaveBillResponse response) {
                 if(response.getStatusCode()!=null&&response.getStatusCode().getErrorCode()==0){
                     billnumber = response.getBillNumber();
-                    ToastUtils.show(context,"Your order placed successfully.Your order bill number is "+response.getBillNumber()+" .");
+                   // ToastUtils.show(context,"Your order placed successfully.Your order bill number is "+response.getBillNumber()+" .");
                     for(int i=0;i<mSelectedItemAdapter.getItemCount();i++){
                         if(mSelectedItemAdapter.getItem(i) instanceof Item){
                             Item selectedItem = (Item) mSelectedItemAdapter.getItem(i);
@@ -419,6 +420,16 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                             selectedItem.setOrderedQuantity(selectedItem.getItemQuantity());
                             mSelectedItemAdapter.notifyItemChanged(i);
                             savebill=true;
+                            DialogUtils.showBasicMessage(context, "Your order placed successfully.Your order bill number is " + response.getBillNumber() + " .", new MaterialDialog.SingleButtonCallback() {
+                                @Override
+                                public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                    Intent in=new Intent();
+                                    in.putExtra("billNo",billnumber);
+                                    setResult(RESULT_OK,in);
+                                    finish();
+                                }
+                            });
+
                         }
                     }
 
