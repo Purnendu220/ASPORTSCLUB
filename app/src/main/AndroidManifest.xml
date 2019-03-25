@@ -15,7 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SearchItemActivity"></activity>
+        <activity android:name=".SearchItemActivity"
+            android:screenOrientation="landscape">
+
+        </activity>
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="landscape" />

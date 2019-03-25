@@ -100,6 +100,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         AppSharedPreferences.getInstance().setUrl("");
+                        AppSharedPreferences.getInstance().setValidurl("no");
                         AppSharedPreferences.getInstance().setuserName("");
                         RestServiceFactory.apiService=null;
                         AppSharedPreferences.getInstance().setTableInfo(null);
@@ -128,7 +129,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                 });
             }
         });
-        recycler_table_view.setLayoutManager(new GridAutofitLayoutManager(TableBookingActivity.this, 200));
+        recycler_table_view.setLayoutManager(new GridAutofitLayoutManager(TableBookingActivity.this, 100));
         recycler_table_view.setHasFixedSize(false);
         // recyclerViewClass.scrollToPosition(0);
 
