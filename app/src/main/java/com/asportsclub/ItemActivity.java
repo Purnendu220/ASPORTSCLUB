@@ -131,6 +131,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                 item.setItemRate(itemBillDetail.getBillDetails().getItemDetails().get(i).getItemRate());
                 item.setTaxPercentage(itemBillDetail.getBillDetails().getItemDetails().get(i).getVatRate());
                 item.setServiceCharge(itemBillDetail.getBillDetails().getItemDetails().get(i).getServiceCharge());
+                item.setOrderedQuantity(itemBillDetail.getBillDetails().getItemDetails().get(i).getQuantity());
                 item.setItemOrderStatus(true);
                 mSelectedItemList.add(item);
             }
@@ -199,7 +200,33 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             @Override
             public void onResponse(Call<MenuItems> call, Response<MenuItems> restResponse, MenuItems response) {
                 mMenuItes = response;
-                menuItemAdapter.addAllItem(response.getMenuItems());
+                if(mSelectedItemList!=null&&mSelectedItemList.size()>0){
+                    for (MenuItem menuItem:mMenuItes.getMenuItems()) {
+                        if(menuItem.getSubMenuItems().size()>0){
+                            for (SubMenuItem subMenuItem:menuItem.getSubMenuItems()) {
+                                if(subMenuItem.getItems().size()>0){
+                                    for (Item item:subMenuItem.getItems()) {
+                                        for (Item selected:mSelectedItemList) {
+                                            if(selected.getItemCode()==item.getItemCode()){
+                                                item.setItemQuantity(selected.getItemQuantity());
+                                                item.setOrderedQuantity(selected.getItemQuantity());
+                                            }
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    menuItemAdapter.addAllItem(mMenuItes.getMenuItems());
+
+                }
+                else{
+                    menuItemAdapter.addAllItem(response.getMenuItems());
+
+                }
+
+
 
             }
         });
@@ -241,11 +268,11 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             if(model.getItemQuantity()>0){
                 if(itemPosition > -1){
                     Item selectedItem = (Item) mSelectedItemAdapter.getItem(itemPosition);
+                    if(model.getOrderedQuantity()>0&&model.getOrderedQuantity() == model.getItemQuantity()){
+                        selectedItem.setItemOrderStatus(true);
+                    }
                     selectedItem.setItemQuantity(model.getItemQuantity());
                     mSelectedItemAdapter.notifyItemChanged(itemPosition);
-
-
-
                 }else{
                     mSelectedItemList.add(model);
                     mSelectedItemAdapter.addItem(model);
@@ -285,7 +312,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
 
             }else{
                 model.setItemOrderStatus(false);
-                mSelectedItemList.add(model);
+                mSelectedItemList.add(0,model);
                 mSelectedItemAdapter.addItem(model);
                 mSelectedItemAdapter.notifyDataSetChanged();
 

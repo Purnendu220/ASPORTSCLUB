@@ -10,7 +10,7 @@ public class MenuItem implements Serializable {
 
 @SerializedName("MenuCode")
 @Expose
-private Integer menuCode;
+private int menuCode;
 @SerializedName("MenuName")
 @Expose
 private String menuName;
@@ -20,11 +20,11 @@ private List<SubMenuItem> subMenuItems = null;
 
 private boolean isExpanded = true;
 
-public Integer getMenuCode() {
+public int getMenuCode() {
 return menuCode;
 }
 
-public void setMenuCode(Integer menuCode) {
+public void setMenuCode(int menuCode) {
 this.menuCode = menuCode;
 }
 
