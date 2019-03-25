@@ -52,7 +52,7 @@ public class SelectedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void addItem(Item model) {
-        list.add(model);
+        list.add(1,model);
         addLoader();
         notifyDataSetChanged();
     }

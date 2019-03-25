@@ -3,6 +3,7 @@ package com.asportsclub.viewholder;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,9 +23,9 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
 
     LinearLayout itemDesc;
     TextView textItemName,textItemRate,textItemQuantity;
-    ImageView minusButton,plusButton;
-    View plusButtonView,minusButtonView;
-    RelativeLayout relativeLayoutParent;
+    FloatingActionButton minusButton,plusButton;
+   // View plusButtonView,minusButtonView;
+    LinearLayout relativeLayoutParent;
     private Context context;
 
 
@@ -37,13 +38,13 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         textItemRate = (TextView)itemView.findViewById(R.id.textItemRate);
         textItemQuantity = (TextView)itemView.findViewById(R.id.textItemQuantity);
 
-        minusButton=(ImageView)itemView.findViewById(R.id.minusButton);
-        plusButton=(ImageView)itemView.findViewById(R.id.plusButton);
+        minusButton=(FloatingActionButton)itemView.findViewById(R.id.minusButton);
+        plusButton=(FloatingActionButton)itemView.findViewById(R.id.plusButton);
 
-        plusButtonView=(View)itemView.findViewById(R.id.plusButtonView);
-        minusButtonView=(View)itemView.findViewById(R.id.minusButtonView);
+//        plusButtonView=(View)itemView.findViewById(R.id.plusButtonView);
+//        minusButtonView=(View)itemView.findViewById(R.id.minusButtonView);
 
-        relativeLayoutParent = (RelativeLayout)itemView.findViewById(R.id.relativeLayoutParent);
+        relativeLayoutParent = (LinearLayout)itemView.findViewById(R.id.relativeLayoutParent);
 
         RefrenceWrapper.getRefrenceWrapper(context).getFontTypeFace().setRobotoBoldTypeFace(context,textItemQuantity);
         RefrenceWrapper.getRefrenceWrapper(context).getFontTypeFace().setRobotoItalicTypeFace(context,textItemName,textItemRate);
@@ -57,11 +58,11 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
         if(model.getItemQuantity()>0){
             textItemQuantity.setText(model.getItemQuantity()+" ");
             minusButton.setVisibility(View.VISIBLE);
-            minusButtonView.setVisibility(View.VISIBLE);
+            //minusButtonView.setVisibility(View.VISIBLE);
         }else{
             textItemQuantity.setText("ADD");
             minusButton.setVisibility(View.GONE);
-            minusButtonView.setVisibility(View.GONE);
+           // minusButtonView.setVisibility(View.GONE);
 
 
         }
