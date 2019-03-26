@@ -8,17 +8,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.asportsclub.adapter.ItemAdapter;
 import com.asportsclub.rest.Response.Item;
-import com.asportsclub.rest.Response.ItemBillDetail;
 import com.asportsclub.rest.Response.MembershipDetails;
 import com.asportsclub.rest.Response.MenuItem;
 import com.asportsclub.rest.Response.MenuItems;
@@ -71,7 +67,7 @@ public class SearchItemActivity extends AppCompatActivity implements AdapterCall
 
         itemView.setVisibility(View.VISIBLE);
         itemView.setLayoutManager(new LinearLayoutManager(this));
-        itemAdapter = new ItemAdapter(this,false,this);
+        itemAdapter = new ItemAdapter(this,false,this, membershipDetails);
 
         itemView.setHasFixedSize(false);
         setupSearchItemList();
@@ -243,7 +239,7 @@ public class SearchItemActivity extends AppCompatActivity implements AdapterCall
     private void addItem(Item model){
         int itemPosition = -1;
         double itemsPrice = handleItemAndTotalBeforeAdd(model);
-        if(membershipDetails.getMemberType()=="D"||membershipDetails.getMemberType()=="X"){
+        if(membershipDetails.getMemberType().equalsIgnoreCase("D")||membershipDetails.getMemberType().equalsIgnoreCase("X")){
             if(itemsPrice > membershipDetails.getOpeningBalance()){
                 ToastUtils.show(this,"You can't add this item your balace is low.");
                 return;

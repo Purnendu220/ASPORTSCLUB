@@ -106,11 +106,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         imageviewSearch.setOnClickListener(this);
 
 
-        recyclerItemView.setLayoutManager(new LinearLayoutManager(ItemActivity.this));
-        recyclerItemView.setHasFixedSize(false);
-        menuItemAdapter = new MenuItemAdapter(ItemActivity.this,false,this);
-        recyclerItemView.setAdapter(menuItemAdapter);
-        recyclerItemView.setItemAnimator(new DefaultItemAnimator());
+
 
         mSelectedItemAdapter = new SelectedItemAdapter(ItemActivity.this,false,this);
         itemSelectedView.setLayoutManager(new LinearLayoutManager(ItemActivity.this));
@@ -138,6 +134,11 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             mSelectedItemAdapter.addAllItem(mSelectedItemList);
             mSelectedItemAdapter.notifyDataSetChanged();
         }
+        recyclerItemView.setLayoutManager(new LinearLayoutManager(ItemActivity.this));
+        recyclerItemView.setHasFixedSize(false);
+        menuItemAdapter = new MenuItemAdapter(ItemActivity.this,false,this,membershipDetails);
+        recyclerItemView.setAdapter(menuItemAdapter);
+        recyclerItemView.setItemAnimator(new DefaultItemAnimator());
         if(membershipDetails!=null)
             text_signin.setText(selectvenderName+"("+membershipDetails.getMembershipId()+")");
         else
@@ -292,7 +293,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     private void addItem(Item model){
         int itemPosition = -1;
         double itemsPrice = handleItemAndTotalBeforeAdd(model);
-        if(membershipDetails.getMemberType()=="D"||membershipDetails.getMemberType()=="X"){
+        if(membershipDetails.getMemberType().equalsIgnoreCase("D")||membershipDetails.getMemberType().equalsIgnoreCase("X")){
             if(itemsPrice > membershipDetails.getOpeningBalance()){
                 ToastUtils.show(context,"You can't add this item your balace is low.");
                 return;
@@ -523,7 +524,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     private void addItemFromSearch(Item model){
         int itemPosition = -1;
         double itemsPrice = handleItemAndTotalBeforeAdd(model);
-        if(membershipDetails.getMemberType()=="D"||membershipDetails.getMemberType()=="X"){
+        if(membershipDetails.getMemberType().equalsIgnoreCase("D")||membershipDetails.getMemberType().equalsIgnoreCase("X")){
             if(itemsPrice > membershipDetails.getOpeningBalance()){
                 ToastUtils.show(context,"You can't add this item your balace is low.");
                 return;

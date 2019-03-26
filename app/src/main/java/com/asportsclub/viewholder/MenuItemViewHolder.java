@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.asportsclub.R;
 import com.asportsclub.RefrenceWrapper;
 import com.asportsclub.adapter.SubMenuAdapter;
+import com.asportsclub.rest.Response.MembershipDetails;
 import com.asportsclub.rest.Response.MenuItem;
 import com.asportsclub.utils.AdapterCallbacks;
 import com.asportsclub.utils.AdapterUpdateListener;
@@ -37,12 +38,12 @@ public class MenuItemViewHolder extends RecyclerView.ViewHolder {
 
     }
 
-    public void bind(final MenuItem model, final AdapterCallbacks adapterCallbacks, final int position, final AdapterUpdateListener adapterUpdateListener) {
+    public void bind(final MenuItem model, final AdapterCallbacks adapterCallbacks, final int position, final AdapterUpdateListener adapterUpdateListener, MembershipDetails membershipDetails) {
         textView.setText(model.getMenuName());
         imageLeft.setImageDrawable(context.getResources().getDrawable(R.drawable.menu));
         subMenuItems.setLayoutManager(new LinearLayoutManager(context));
         subMenuItems.setHasFixedSize(false);
-        submenuItemAdapter = new SubMenuAdapter(context,false,adapterCallbacks);
+        submenuItemAdapter = new SubMenuAdapter(context,false,adapterCallbacks,membershipDetails);
         subMenuItems.setAdapter(submenuItemAdapter);
         subMenuItems.setItemAnimator(new DefaultItemAnimator());
         submenuItemAdapter.addAllItem(model.getSubMenuItems());

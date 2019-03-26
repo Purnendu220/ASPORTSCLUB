@@ -10,13 +10,12 @@ import android.widget.LinearLayout;
 import com.asportsclub.ListLoader;
 import com.asportsclub.R;
 import com.asportsclub.rest.Response.Item;
-import com.asportsclub.rest.Response.MenuItem;
-import com.asportsclub.rest.Response.SubMenuItem;
+import com.asportsclub.rest.Response.MembershipDetails;
 import com.asportsclub.utils.AdapterCallbacks;
+import com.asportsclub.utils.ToastUtils;
 import com.asportsclub.viewholder.EmptyViewHolder;
 import com.asportsclub.viewholder.ItemViewHolder;
 import com.asportsclub.viewholder.LoaderViewHolder;
-import com.asportsclub.viewholder.SubMenuItemViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,16 +32,16 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
     private List<Object> list;
     private Context context;
 
-
+    private MembershipDetails membershipDetails;
     private boolean showLoader;
     private ListLoader listLoader;
 
-    public ItemAdapter(Context context, boolean showLoader, AdapterCallbacks<Item> adapterCallbacks) {
+    public ItemAdapter(Context context, boolean showLoader, AdapterCallbacks<Item> adapterCallbacks, MembershipDetails openingBalnce) {
         this.adapterCallbacks = adapterCallbacks;
         this.context = context;
         list = new ArrayList<>();
         this.showLoader = showLoader;
-
+        this.membershipDetails=openingBalnce;
         listLoader = new ListLoader(true, "No more Items");
     }
 
@@ -147,6 +146,13 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         switch (view.getId()) {
             case R.id.minusButton:
                 item = (Item) getItem(position);
+                if(membershipDetails.getMemberType().equalsIgnoreCase("D")||membershipDetails.getMemberType().equalsIgnoreCase("X")){
+                    if(item.getItemRate() > membershipDetails.getOpeningBalance()){
+                        ToastUtils.show(context,"You can't add this item your balace is low.");
+                        return;
+                    }
+                }
+
                 if(item.getOrderedQuantity() != item.getItemQuantity()){
                     int itemQuantity=item.getItemQuantity();
                     item.setItemQuantity(itemQuantity-1);
@@ -155,6 +161,12 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 break;
             case R.id.plusButton:
                 item = (Item) getItem(position);
+                if(membershipDetails.getMemberType().equalsIgnoreCase("D")||membershipDetails.getMemberType().equalsIgnoreCase("X")){
+                    if(item.getItemRate() > membershipDetails.getOpeningBalance()){
+                        ToastUtils.show(context,"You can't add this item your balace is low.");
+                        return;
+                    }
+                }
                 int itemModelQuantity=item.getItemQuantity();
                 item.setItemQuantity(itemModelQuantity+1);
                 notifyItemChanged(position);
