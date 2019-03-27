@@ -60,7 +60,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     TextView txtTotalValue,text_signin,txtClosingBalanceValue,textOpeningBalance;
     EditText edtPax;
     private RelativeLayout layoutTotal;
-    private LinearLayout layoutNoData;
+    private LinearLayout layoutNoData,linearOpeningBalnce,linearClosingBalanceLayout;
     private Button btn_proceed;
     private Context context;
     private ImageView imageViewLogout,imageViewSetting,imageviewSearch;
@@ -100,6 +100,8 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         text_signin=(TextView)findViewById(R.id.text_signin);
         txtClosingBalanceValue=(TextView)findViewById(R.id.txtClosingBalanceValue);
         textOpeningBalance=(TextView)findViewById(R.id.textOpeningBalance);
+        linearOpeningBalnce=(LinearLayout)findViewById(R.id.linearOpeningBalnce);
+        linearClosingBalanceLayout=(LinearLayout)findViewById(R.id.linearClosingBalanceLayout);
 
 
         btn_proceed.setOnClickListener(this);
@@ -145,6 +147,14 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             text_signin.setText(selectvenderName+"("+itemBillDetail.getBillDetails().getMembershipDetails().getMembershipId()+")");
         handleItemAndTotal();
         hitGetItemList();
+        if(membershipDetails.getMemberType().equalsIgnoreCase("M")||membershipDetails.getMemberType().equalsIgnoreCase("S")){
+            linearClosingBalanceLayout.setVisibility(View.GONE);
+            linearOpeningBalnce.setVisibility(View.GONE);
+        }
+        else{
+            linearClosingBalanceLayout.setVisibility(View.VISIBLE);
+            linearOpeningBalnce.setVisibility(View.VISIBLE);
+        }
         RefrenceWrapper.getRefrenceWrapper(context).getFontTypeFace().setRobotoBoldTypeFace(context,txtTotalValue);
         imageViewSetting.setOnClickListener(new View.OnClickListener() {
             @Override

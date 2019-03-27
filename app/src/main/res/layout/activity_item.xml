@@ -99,6 +99,7 @@
                         android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
                 <LinearLayout
+                    android:id="@+id/linearOpeningBalnce"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
