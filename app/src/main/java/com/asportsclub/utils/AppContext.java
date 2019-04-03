@@ -9,6 +9,7 @@ public class AppContext {
 	private static AppContext INSTANCE = null;
 	private Application mApplication;
 	private Activity mActivity;
+	private double getItemTotal;
 	
 	public static AppContext getInstance (){
 		
@@ -34,5 +35,11 @@ public class AppContext {
 		return this.mActivity;
 	}
 
+	public double getGetItemTotal() {
+		return getItemTotal;
+	}
 
+	public void setGetItemTotal(double getItemTotal) {
+		this.getItemTotal = getItemTotal;
+	}
 }

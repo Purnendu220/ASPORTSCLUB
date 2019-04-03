@@ -36,6 +36,7 @@ import com.asportsclub.rest.Response.VenderTableDetail;
 import com.asportsclub.rest.RestCallBack;
 import com.asportsclub.rest.RestServiceFactory;
 import com.asportsclub.utils.AdapterCallbacks;
+import com.asportsclub.utils.AppContext;
 import com.asportsclub.utils.AppSharedPreferences;
 import com.asportsclub.utils.DialogUtils;
 import com.asportsclub.utils.ToastUtils;
@@ -194,6 +195,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         });
         textOpeningBalance.setText(""+membershipDetails.getOpeningBalance());
         setClosingBalance();
+        AppContext.getInstance().setGetItemTotal(getItemTotal());
     }
     private void setClosingBalance(){
         txtClosingBalanceValue.setText(String.format("%.2f",(membershipDetails.getOpeningBalance()-getItemTotal())));
@@ -299,6 +301,8 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             }
             handleItemAndTotal();
         }
+        AppContext.getInstance().setGetItemTotal(getItemTotal());
+
     }
     private void addItem(Item model){
         int itemPosition = -1;
@@ -334,6 +338,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             mSelectedItemAdapter.removeItem(itemPosition);
         }
         handleItemAndTotal();
+        AppContext.getInstance().setGetItemTotal(getItemTotal());
 
     }
 
@@ -410,6 +415,11 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                         }
                         double itemTotal = getItemTotal();
                         double itemTotalDecimal = getItemTotal() % 1;
+                        if(billItems.size()==0){
+                            ToastUtils.show(context,"Please add items before proceeding order");
+                           return;
+                        }
+
                         if(itemTotal==0){
                             ToastUtils.show(context,"You already placed your order.Add some items to update your order.");
                         }else{

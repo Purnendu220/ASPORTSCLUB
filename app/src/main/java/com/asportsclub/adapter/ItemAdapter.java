@@ -12,6 +12,7 @@ import com.asportsclub.R;
 import com.asportsclub.rest.Response.Item;
 import com.asportsclub.rest.Response.MembershipDetails;
 import com.asportsclub.utils.AdapterCallbacks;
+import com.asportsclub.utils.AppContext;
 import com.asportsclub.utils.ToastUtils;
 import com.asportsclub.viewholder.EmptyViewHolder;
 import com.asportsclub.viewholder.ItemViewHolder;
@@ -146,13 +147,6 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
         switch (view.getId()) {
             case R.id.minusButton:
                 item = (Item) getItem(position);
-                if(membershipDetails.getMemberType().equalsIgnoreCase("D")||membershipDetails.getMemberType().equalsIgnoreCase("X")){
-                    if(item.getItemRate() > membershipDetails.getOpeningBalance()){
-                        ToastUtils.show(context,"You can't add this item your balace is low.");
-                        return;
-                    }
-                }
-
                 if(item.getOrderedQuantity() != item.getItemQuantity()){
                     int itemQuantity=item.getItemQuantity();
                     item.setItemQuantity(itemQuantity-1);
@@ -162,8 +156,8 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
             case R.id.plusButton:
                 item = (Item) getItem(position);
                 if(membershipDetails.getMemberType().equalsIgnoreCase("D")||membershipDetails.getMemberType().equalsIgnoreCase("X")){
-                    if(item.getItemRate() > membershipDetails.getOpeningBalance()){
-                        ToastUtils.show(context,"You can't add this item your balace is low.");
+                    if((AppContext.getInstance().getGetItemTotal()+item.getItemRate()) > membershipDetails.getOpeningBalance()){
+                        ToastUtils.show(context,"You can't add this item your balance is low.");
                         return;
                     }
                 }
