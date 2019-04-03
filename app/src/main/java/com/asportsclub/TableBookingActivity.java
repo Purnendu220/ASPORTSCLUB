@@ -226,6 +226,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
             public void onResponse(Call<VenderTableDetails> call, Response<VenderTableDetails> restResponse, VenderTableDetails response) {
                 if (response != null && response.getStatusCode().getErrorCode()==0) {
                     progressBar.setVisibility(View.GONE);
+                    authenticateUserResponse.setVenderTableDetails(null);
                     authenticateUserResponse.setVenderTableDetails(response.getVenderTableDetails());
                     AppSharedPreferences.getInstance().setTableInfo(authenticateUserResponse);
                     setTableData();
@@ -349,7 +350,7 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
                     tableModel.setTableStatus(2);
                     if (selectedSeat > -1 && index != selectedSeat) {
                         VenderTableDetail previousSelected = (VenderTableDetail) tableBookingAdapter.getList().get(selectedSeat);
-                        previousSelected.setTableStatus(0);
+//                        previousSelected.setTableStatus(0);
                         tableBookingAdapter.notifyItemChanged(selectedSeat);
 
                     }
@@ -381,7 +382,6 @@ public class TableBookingActivity extends AppCompatActivity implements AdapterCa
             if (resultCode == RESULT_OK) {
                int tableId = data.getIntExtra("tableId",0);
                int billNo = data.getIntExtra("billNo",0);
-               ToastUtils.show(context,tableId+"");
                setTableStatusData(tableId,billNo);
             }else{
                 tableBookingAdapter.getList().get(selectedSeat).setTableStatus(0);

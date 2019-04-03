@@ -13,6 +13,7 @@ import com.asportsclub.R;
 import com.asportsclub.RefrenceWrapper;
 import com.asportsclub.adapter.ItemAdapter;
 import com.asportsclub.adapter.SubMenuAdapter;
+import com.asportsclub.rest.Response.MembershipDetails;
 import com.asportsclub.rest.Response.MenuItem;
 import com.asportsclub.rest.Response.SubMenuItem;
 import com.asportsclub.utils.AdapterCallbacks;
@@ -38,12 +39,12 @@ public class SubMenuItemViewHolder  extends RecyclerView.ViewHolder {
 
     }
 
-    public void bind(final SubMenuItem model, final AdapterCallbacks adapterCallbacks, final int position) {
+    public void bind(final SubMenuItem model, final AdapterCallbacks adapterCallbacks, final int position, MembershipDetails openingBalnce) {
         textView.setText(model.getSubMenuName());
         subMenuItems.setVisibility(View.VISIBLE);
         subMenuItems.setLayoutManager(new LinearLayoutManager(context));
         subMenuItems.setHasFixedSize(false);
-        itemAdapter = new ItemAdapter(context,false,adapterCallbacks);
+        itemAdapter = new ItemAdapter(context,false,adapterCallbacks,openingBalnce);
         subMenuItems.setAdapter(itemAdapter);
         subMenuItems.setItemAnimator(new DefaultItemAnimator());
        // if(model.getItems()!=null)

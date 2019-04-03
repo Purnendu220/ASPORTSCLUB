@@ -60,7 +60,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     TextView txtTotalValue,text_signin,txtClosingBalanceValue,textOpeningBalance;
     EditText edtPax;
     private RelativeLayout layoutTotal;
-    private LinearLayout layoutNoData;
+    private LinearLayout layoutNoData,linearOpeningBalnce,linearClosingBalanceLayout;
     private Button btn_proceed;
     private Context context;
     private ImageView imageViewLogout,imageViewSetting,imageviewSearch;
@@ -100,17 +100,15 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         text_signin=(TextView)findViewById(R.id.text_signin);
         txtClosingBalanceValue=(TextView)findViewById(R.id.txtClosingBalanceValue);
         textOpeningBalance=(TextView)findViewById(R.id.textOpeningBalance);
+        linearOpeningBalnce=(LinearLayout)findViewById(R.id.linearOpeningBalnce);
+        linearClosingBalanceLayout=(LinearLayout)findViewById(R.id.linearClosingBalanceLayout);
 
 
         btn_proceed.setOnClickListener(this);
         imageviewSearch.setOnClickListener(this);
 
 
-        recyclerItemView.setLayoutManager(new LinearLayoutManager(ItemActivity.this));
-        recyclerItemView.setHasFixedSize(false);
-        menuItemAdapter = new MenuItemAdapter(ItemActivity.this,false,this);
-        recyclerItemView.setAdapter(menuItemAdapter);
-        recyclerItemView.setItemAnimator(new DefaultItemAnimator());
+
 
         mSelectedItemAdapter = new SelectedItemAdapter(ItemActivity.this,false,this);
         itemSelectedView.setLayoutManager(new LinearLayoutManager(ItemActivity.this));
@@ -138,12 +136,25 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             mSelectedItemAdapter.addAllItem(mSelectedItemList);
             mSelectedItemAdapter.notifyDataSetChanged();
         }
+        recyclerItemView.setLayoutManager(new LinearLayoutManager(ItemActivity.this));
+        recyclerItemView.setHasFixedSize(false);
+        menuItemAdapter = new MenuItemAdapter(ItemActivity.this,false,this,membershipDetails);
+        recyclerItemView.setAdapter(menuItemAdapter);
+        recyclerItemView.setItemAnimator(new DefaultItemAnimator());
         if(membershipDetails!=null)
             text_signin.setText(selectvenderName+"("+membershipDetails.getMembershipId()+")");
         else
             text_signin.setText(selectvenderName+"("+itemBillDetail.getBillDetails().getMembershipDetails().getMembershipId()+")");
         handleItemAndTotal();
         hitGetItemList();
+        if(membershipDetails.getMemberType().equalsIgnoreCase("M")||membershipDetails.getMemberType().equalsIgnoreCase("S")){
+            linearClosingBalanceLayout.setVisibility(View.GONE);
+            linearOpeningBalnce.setVisibility(View.GONE);
+        }
+        else{
+            linearClosingBalanceLayout.setVisibility(View.VISIBLE);
+            linearOpeningBalnce.setVisibility(View.VISIBLE);
+        }
         RefrenceWrapper.getRefrenceWrapper(context).getFontTypeFace().setRobotoBoldTypeFace(context,txtTotalValue);
         imageViewSetting.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -292,7 +303,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     private void addItem(Item model){
         int itemPosition = -1;
         double itemsPrice = handleItemAndTotalBeforeAdd(model);
-        if(membershipDetails.getMemberType()=="D"||membershipDetails.getMemberType()=="X"){
+        if(membershipDetails.getMemberType().equalsIgnoreCase("D")||membershipDetails.getMemberType().equalsIgnoreCase("X")){
             if(itemsPrice > membershipDetails.getOpeningBalance()){
                 ToastUtils.show(context,"You can't add this item your balace is low.");
                 return;
@@ -523,7 +534,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     private void addItemFromSearch(Item model){
         int itemPosition = -1;
         double itemsPrice = handleItemAndTotalBeforeAdd(model);
-        if(membershipDetails.getMemberType()=="D"||membershipDetails.getMemberType()=="X"){
+        if(membershipDetails.getMemberType().equalsIgnoreCase("D")||membershipDetails.getMemberType().equalsIgnoreCase("X")){
             if(itemsPrice > membershipDetails.getOpeningBalance()){
                 ToastUtils.show(context,"You can't add this item your balace is low.");
                 return;

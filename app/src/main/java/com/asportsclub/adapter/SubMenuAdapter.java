@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import com.asportsclub.ListLoader;
 import com.asportsclub.R;
 import com.asportsclub.rest.Response.Item;
+import com.asportsclub.rest.Response.MembershipDetails;
 import com.asportsclub.rest.Response.MenuItem;
 import com.asportsclub.rest.Response.SubMenuItem;
 import com.asportsclub.utils.AdapterCallbacks;
@@ -31,16 +32,16 @@ public class SubMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private List<Object> list;
     private Context context;
 
-
+    private MembershipDetails membershipDetails;
     private boolean showLoader;
     private ListLoader listLoader;
 
-    public SubMenuAdapter(Context context, boolean showLoader, AdapterCallbacks<Item> adapterCallbacks) {
+    public SubMenuAdapter(Context context, boolean showLoader, AdapterCallbacks<Item> adapterCallbacks, MembershipDetails openingBalance) {
         this.adapterCallbacks = adapterCallbacks;
         this.context = context;
         list = new ArrayList<>();
         this.showLoader = showLoader;
-
+        this.membershipDetails=openingBalance;
         listLoader = new ListLoader(true, "No more tables");
     }
 
@@ -116,7 +117,7 @@ public class SubMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof SubMenuItemViewHolder) {
-            ((SubMenuItemViewHolder) holder).bind((SubMenuItem) getItem(position), adapterCallbacks, position);
+            ((SubMenuItemViewHolder) holder).bind((SubMenuItem) getItem(position), adapterCallbacks, position,membershipDetails);
         } else if (holder instanceof LoaderViewHolder) {
             ((LoaderViewHolder) holder).bind(listLoader, adapterCallbacks);
             if (position == getItemCount() - 1 && !listLoader.isFinish()) {

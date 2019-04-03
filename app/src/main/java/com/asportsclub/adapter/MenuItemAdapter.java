@@ -11,6 +11,7 @@ import com.asportsclub.ListLoader;
 import com.asportsclub.R;
 import com.asportsclub.TableBookingModel;
 import com.asportsclub.rest.Response.Item;
+import com.asportsclub.rest.Response.MembershipDetails;
 import com.asportsclub.rest.Response.MenuItem;
 import com.asportsclub.utils.AdapterCallbacks;
 import com.asportsclub.utils.AdapterUpdateListener;
@@ -31,16 +32,17 @@ public class MenuItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private List<Object> list;
     private Context context;
-
+    private MembershipDetails membershipDetails;
 
     private boolean showLoader;
     private ListLoader listLoader;
 
-    public MenuItemAdapter(Context context, boolean showLoader, AdapterCallbacks<Item> adapterCallbacks) {
+    public MenuItemAdapter(Context context, boolean showLoader, AdapterCallbacks<Item> adapterCallbacks, MembershipDetails membershipDetails) {
         this.adapterCallbacks = adapterCallbacks;
         this.context = context;
         list = new ArrayList<>();
         this.showLoader = showLoader;
+        this.membershipDetails=membershipDetails;
 
         listLoader = new ListLoader(true, "No more tables");
     }
@@ -115,7 +117,7 @@ public class MenuItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MenuItemViewHolder) {
-            ((MenuItemViewHolder) holder).bind((MenuItem) getItem(position), adapterCallbacks, position,this);
+            ((MenuItemViewHolder) holder).bind((MenuItem) getItem(position), adapterCallbacks, position,this,membershipDetails);
         } else if (holder instanceof LoaderViewHolder) {
             ((LoaderViewHolder) holder).bind(listLoader, adapterCallbacks);
             if (position == getItemCount() - 1 && !listLoader.isFinish()) {
