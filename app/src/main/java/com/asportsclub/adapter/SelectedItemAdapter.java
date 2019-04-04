@@ -133,6 +133,7 @@ public class SelectedItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             return new SelectedItemHeaderViewHolder(view);
 
         }
+
         else if (viewType == VIEW_TYPE_LOADER) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_list_progress, parent, false);
             return new LoaderViewHolder(view);

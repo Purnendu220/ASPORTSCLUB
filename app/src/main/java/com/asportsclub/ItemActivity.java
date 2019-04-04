@@ -53,7 +53,9 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     MenuItemAdapter menuItemAdapter;
     SelectedItemAdapter mSelectedItemAdapter;
     RecyclerView recyclerItemView,itemSelectedView;
-    List<Item> mSelectedItemList = new ArrayList<>();
+    List<Item> mSelectedItemListUsed = new ArrayList<>();
+    List<Item> mSelectedItemListUnUsed = new ArrayList<>();
+
 
     int tableId,selctedVenderId;
     MembershipDetails membershipDetails;
@@ -132,9 +134,11 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                 item.setServiceCharge(itemBillDetail.getBillDetails().getItemDetails().get(i).getServiceCharge());
                 item.setOrderedQuantity(itemBillDetail.getBillDetails().getItemDetails().get(i).getQuantity());
                 item.setItemOrderStatus(true);
-                mSelectedItemList.add(item);
+                item.setItemUnEditable(true);
+                mSelectedItemListUsed.add(item);
+                mSelectedItemListUnUsed.add(item);
             }
-            mSelectedItemAdapter.addAllItem(mSelectedItemList);
+            mSelectedItemAdapter.addAllItem(mSelectedItemListUsed);
             mSelectedItemAdapter.notifyDataSetChanged();
         }
         recyclerItemView.setLayoutManager(new LinearLayoutManager(ItemActivity.this));
@@ -214,16 +218,16 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             @Override
             public void onResponse(Call<MenuItems> call, Response<MenuItems> restResponse, MenuItems response) {
                 mMenuItes = response;
-                if(mSelectedItemList!=null&&mSelectedItemList.size()>0){
+                if(mSelectedItemListUnUsed!=null&&mSelectedItemListUnUsed.size()>0){
                     for (MenuItem menuItem:mMenuItes.getMenuItems()) {
                         if(menuItem.getSubMenuItems().size()>0){
                             for (SubMenuItem subMenuItem:menuItem.getSubMenuItems()) {
                                 if(subMenuItem.getItems().size()>0){
                                     for (Item item:subMenuItem.getItems()) {
-                                        for (Item selected:mSelectedItemList) {
+                                        for (Item selected:mSelectedItemListUsed) {
                                             if(selected.getItemCode()==item.getItemCode()){
-                                                item.setItemQuantity(selected.getItemQuantity());
-                                                item.setOrderedQuantity(selected.getItemQuantity());
+                                               // item.setItemQuantity(selected.getItemQuantity());
+                                                //item.setOrderedQuantity(selected.getItemQuantity());
                                             }
                                         }
 
@@ -274,29 +278,27 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
         if(model.isItemOrderStatus()){
             ToastUtils.show(context,"Can't remove items that has been ordered");
         }else{
-            for(int i=0;i<mSelectedItemList.size();i++){
-                if(model.getItemCode() == mSelectedItemList.get(i).getItemCode()){
+            for(int i=0;i<mSelectedItemListUnUsed.size();i++){
+                if(model.getItemCode() == mSelectedItemListUnUsed.get(i).getItemCode()&&!mSelectedItemListUnUsed.get(i).isItemUnEditable()){
                     itemPosition = i+1;
+                    break;
                 }
             }
             if(model.getItemQuantity()>0){
                 if(itemPosition > -1){
                     Item selectedItem = (Item) mSelectedItemAdapter.getItem(itemPosition);
-                    if(model.getOrderedQuantity()>0&&model.getOrderedQuantity() == model.getItemQuantity()){
+                    if(model.isItemUnEditable()&&model.getOrderedQuantity()>0&&model.getOrderedQuantity() == model.getItemQuantity()){
                         selectedItem.setItemOrderStatus(true);
+                        selectedItem.setItemUnEditable(true);
                     }
                     selectedItem.setItemQuantity(model.getItemQuantity());
                     mSelectedItemAdapter.notifyItemChanged(itemPosition);
-                }else{
-                    mSelectedItemList.add(model);
-                    mSelectedItemAdapter.addItem(model);
-                    mSelectedItemAdapter.notifyDataSetChanged();
-
                 }
             }
             else{
                 mSelectedItemAdapter.removeItem(itemPosition);
-                mSelectedItemList.remove(itemPosition-1);
+                mSelectedItemListUnUsed.remove(itemPosition-1);
+                mSelectedItemListUsed.remove(itemPosition-1);
 
             }
             handleItemAndTotal();
@@ -306,15 +308,15 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     }
     private void addItem(Item model){
         int itemPosition = -1;
-        double itemsPrice = handleItemAndTotalBeforeAdd(model);
-        if(membershipDetails.getMemberType().equalsIgnoreCase("D")||membershipDetails.getMemberType().equalsIgnoreCase("X")){
-            if(itemsPrice > membershipDetails.getOpeningBalance()){
-                ToastUtils.show(context,"You can't add this item your balace is low.");
-                return;
-            }
-        }
-        for(int i=0;i<mSelectedItemList.size();i++){
-            if(model.getItemCode() == mSelectedItemList.get(i).getItemCode()){
+//        double itemsPrice = handleItemAndTotalBeforeAdd(model);
+//        if(membershipDetails.getMemberType().equalsIgnoreCase("D")||membershipDetails.getMemberType().equalsIgnoreCase("X")){
+//            if(itemsPrice > membershipDetails.getOpeningBalance()){
+//                ToastUtils.show(context,"You can't add this item your balace is low.");
+//                return;
+//            }
+//        }
+        for(int i=0;i<mSelectedItemListUnUsed.size();i++){
+            if(model.getItemCode() == mSelectedItemListUnUsed.get(i).getItemCode()&&!mSelectedItemListUnUsed.get(i).isItemUnEditable()){
                 itemPosition = i+1;
             }
         }
@@ -326,10 +328,21 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                 mSelectedItemAdapter.notifyItemChanged(itemPosition);
 
 
+
             }else{
-                model.setItemOrderStatus(false);
-                mSelectedItemList.add(0,model);
-                mSelectedItemAdapter.addItem(model);
+                int itmQty=model.getItemQuantity();
+                //for(int i=0;i<mSelectedItemListUnUsed.size();i++){
+                    //if(model.getItemCode() == mSelectedItemListUnUsed.get(i).getItemCode()&&mSelectedItemListUnUsed.get(i).isItemUnEditable()){
+                  //      itmQty = model.getItemQuantity()-mSelectedItemListUnUsed.get(i).getItemQuantity();
+                //    }
+              //  }
+                Item itm=model;
+                itm.setItemOrderStatus(false);
+                itm.setItemQuantity(itmQty);
+                itm.setOrderedQuantity(0);
+                mSelectedItemListUnUsed.add(0,itm);
+                mSelectedItemListUsed.add(0,itm);
+                mSelectedItemAdapter.addItem(itm);
                 mSelectedItemAdapter.notifyDataSetChanged();
 
             }
@@ -348,7 +361,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                     layoutTotal.setVisibility(View.VISIBLE);
             layoutNoData.setVisibility(View.GONE);
             double totalValue=0;
-            for (Object item:mSelectedItemAdapter.getList()) {
+            for (Object item:mSelectedItemListUnUsed) {
                 if(item instanceof Item){
                     Item model = (Item) item;
                     double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getServiceCharge())/100)+(((model.getItemRate() * model.getItemQuantity())*model.getTaxPercentage())/100) + (model.getItemRate() * model.getItemQuantity());
@@ -371,7 +384,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     public double handleItemAndTotalBeforeAdd(Item itemToAdd){
         if(mSelectedItemAdapter.getItemCount()>1){
             double totalValue=getItemTotal();
-            double finalprice = (((itemToAdd.getItemRate() * itemToAdd.getItemQuantity())*itemToAdd.getServiceCharge())/100)+(((itemToAdd.getItemRate() * itemToAdd.getItemQuantity())*itemToAdd.getTaxPercentage())/100) + (itemToAdd.getItemRate() * itemToAdd.getItemQuantity());
+            double finalprice = (((itemToAdd.getItemRate() * 1)*itemToAdd.getServiceCharge())/100)+(((itemToAdd.getItemRate() * 1)*itemToAdd.getTaxPercentage())/100) + (itemToAdd.getItemRate() * 1);
 
             totalValue = totalValue + finalprice;
             return totalValue;
@@ -381,7 +394,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
     public double getItemTotal(){
         if(mSelectedItemAdapter.getItemCount()>1){
             double totalValue=0;
-            for (Object item:mSelectedItemAdapter.getList()) {
+            for (Object item:mSelectedItemListUnUsed) {
                 if(item instanceof Item){
                     Item model = (Item) item;
                         double finalprice = (((model.getItemRate() * model.getItemQuantity())*model.getServiceCharge())/100)+(((model.getItemRate() * model.getItemQuantity())*model.getTaxPercentage())/100) + (model.getItemRate() * model.getItemQuantity());
@@ -465,6 +478,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
                         if(mSelectedItemAdapter.getItem(i) instanceof Item){
                             Item selectedItem = (Item) mSelectedItemAdapter.getItem(i);
                             selectedItem.setItemOrderStatus(true);
+                            selectedItem.setItemUnEditable(true);
                             selectedItem.setOrderedQuantity(selectedItem.getItemQuantity());
                             mSelectedItemAdapter.notifyItemChanged(i);
                             savebill=true;
@@ -541,43 +555,7 @@ public class ItemActivity extends AppCompatActivity implements AdapterCallbacks<
             }
         }
     }
-    private void addItemFromSearch(Item model){
-        int itemPosition = -1;
-        double itemsPrice = handleItemAndTotalBeforeAdd(model);
-        if(membershipDetails.getMemberType().equalsIgnoreCase("D")||membershipDetails.getMemberType().equalsIgnoreCase("X")){
-            if(itemsPrice > membershipDetails.getOpeningBalance()){
-                ToastUtils.show(context,"You can't add this item your balace is low.");
-                return;
-            }
-        }
-        for(int i=0;i<mSelectedItemList.size();i++){
-            if(model.getItemCode() == mSelectedItemList.get(i).getItemCode()){
-                itemPosition = i+1;
-            }
-        }
-        if(model.getItemQuantity()>0){
-            if(itemPosition > -1){
-                Item selectedItem = (Item) mSelectedItemAdapter.getItem(itemPosition);
-                int itemQuantity =selectedItem.getItemQuantity();
-                selectedItem.setItemQuantity(model.getItemQuantity());
-                selectedItem.setItemOrderStatus(false);
-                mSelectedItemAdapter.notifyItemChanged(itemPosition);
 
-
-            }else{
-                model.setItemOrderStatus(false);
-                mSelectedItemList.add(model);
-                mSelectedItemAdapter.addItem(model);
-                mSelectedItemAdapter.notifyDataSetChanged();
-
-            }
-        }
-        else{
-            mSelectedItemAdapter.removeItem(itemPosition);
-        }
-        handleItemAndTotal();
-
-    }
 
     @Override
     public void onBackPressed() {

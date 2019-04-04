@@ -150,7 +150,7 @@ public class ItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> i
                 if(item.getOrderedQuantity() != item.getItemQuantity()){
                     int itemQuantity=item.getItemQuantity();
                     item.setItemQuantity(itemQuantity-1);
-                    notifyItemChanged(position);
+                   notifyItemChanged(position);
                 }
                 break;
             case R.id.plusButton:

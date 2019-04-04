@@ -37,8 +37,12 @@ private Integer UnitCode;
 private int itemQuantity;
 private boolean itemOrderStatus;
 private int orderedQuantity;
+private boolean itemUnEditable;
 
-public int getItemCode() {
+    public void setTaxPercentage(double taxPercentage) {
+        this.taxPercentage = taxPercentage;
+    }
+    public int getItemCode() {
 return itemCode;
 }
 
@@ -46,7 +50,15 @@ public void setItemCode(int itemCode) {
 this.itemCode = itemCode;
 }
 
-public String getItemName() {
+    public boolean isItemUnEditable() {
+        return itemUnEditable;
+    }
+
+    public void setItemUnEditable(boolean itemUnEditable) {
+        this.itemUnEditable = itemUnEditable;
+    }
+
+    public String getItemName() {
 return itemName;
 }
 
